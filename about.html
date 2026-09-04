@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - InternLocate</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS for Brand Tweaks -->
+    <style>
+        :root {
+            --bs-primary: #4f46e5;
+            --bs-primary-hover: #4338ca;
+        }
+        .bg-brand-primary {
+            background-color: #4f46e5 !important;
+        }
+        .btn-brand {
+            background-color: #4f46e5;
+            color: #ffffff;
+        }
+        .btn-brand:hover {
+            background-color: #4338ca;
+            color: #ffffff;
+        }
+        .text-brand-yellow {
+            color: #fde047;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100 text-dark">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="bg-brand-primary text-white shadow-sm sticky-top">
+        <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
+            <!-- Brand Logo -->
+            <a href="index.html" class="d-flex align-items-center text-white text-decoration-none space-x-2">
+                <i class="fa-solid fa-graduation-cap fa-2x text-brand-yellow me-2"></i>
+                <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="d-none d-md-flex align-items-center gap-4 font-medium">
+                <a href="index.html" class="text-white text-decoration-none opacity-75 opacity-100-hover">Home</a>
+                <a href="index.html#companies" class="text-white text-decoration-none opacity-75 opacity-100-hover">Companies</a>
+                <a href="about.html" class="text-brand-yellow text-decoration-none fw-bold">About Services</a>
+                <a href="#contact" class="text-white text-decoration-none opacity-75 opacity-100-hover">Contact</a>
+            </nav>
+
+            <!-- Location Search Input -->
+            <div class="position-relative" style="width: 240px;">
+                <input type="text" placeholder="Search by district/city..." class="form-control form-control-sm rounded-pill ps-4 border-0">
+                <i class="fa-solid fa-location-dot position-absolute top-50 start-0 translate-middle-y ms-2.5 text-muted small" style="left: 6px;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-banner text-white py-5 px-3 text-center">
+        <div class="container py-3">
+            <h1 class="display-5 fw-bold mb-3">Empowering Students Across Districts</h1>
+            <p class="lead text-light max-w-2xl mx-auto col-md-8">
+                Simplifying the discovery of verified nearby internships and in-plant training opportunities for relocating college students.
+            </p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="container py-5 flex-grow-1">
+
+        <!-- OUR MISSION SECTION -->
+        <div class="row align-items-center mb-5 g-4">
+            <div class="col-lg-6">
+                <span class="badge bg-indigo-100 text-primary mb-2 px-3 py-2 rounded-pill fw-bold">Our Mission</span>
+                <h2 class="fw-bold mb-3">Bridging the Gap Between Remote Students & Quality Training</h2>
+                <p class="text-secondary">
+                    Relocating to an unfamiliar district for practical training can be daunting. <strong>InternLocate</strong> was created to eliminate guesswork by mapping out verified local companies, transparent student ratings, and precise proximity data.
+                </p>
+                <ul class="list-unstyled text-secondary">
+                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i> Verified training centers & company profiles</li>
+                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i> Real student feedback and rating metrics</li>
+                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i> Geo-located company recommendations</li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Team Collaboration" class="img-fluid rounded-4 shadow-sm border">
+            </div>
+        </div>
+
+        <!-- CORE SERVICES CARDS -->
+        <div class="my-5">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Services We Offer</h2>
+                <p class="text-muted">Designed specifically to assist engineering and technical domain students.</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Service 1 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card-body">
+                            <div class="feature-icon bg-primary bg-opacity-10 text-primary mb-3">
+                                <i class="fa-solid fa-location-crosshairs fa-xl"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Proximity Search</h5>
+                            <p class="card-text text-muted">Locate institutes and corporations offering in-plant training within radial distances of your current stay.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card-body">
+                            <div class="feature-icon bg-success bg-opacity-10 text-success mb-3">
+                                <i class="fa-solid fa-file-signature fa-xl"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Direct Application</h5>
+                            <p class="card-text text-muted">Streamline your application process by sending your student profile and department details straight to recruiters.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3">
+                        <div class="card-body">
+                            <div class="feature-icon bg-warning bg-opacity-10 text-warning mb-3">
+                                <i class="fa-solid fa-shield-halved fa-xl"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Verified Analytics</h5>
+                            <p class="card-text text-muted">Access aggregated data on student intake numbers, verified reviews, and specialized department tracks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- METRICS/STATS BAR -->
+        <div class="bg-brand-primary text-white rounded-4 p-4 p-md-5 shadow-sm my-5 text-center">
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <h3 class="display-6 fw-bold text-brand-yellow">500+</h3>
+                    <p class="mb-0 text-light opacity-75">Verified Companies</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="display-6 fw-bold text-brand-yellow">12,000+</h3>
+                    <p class="mb-0 text-light opacity-75">Students Assisted</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="display-6 fw-bold text-brand-yellow">30+</h3>
+                    <p class="mb-0 text-light opacity-75">Districts Covered</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="display-6 fw-bold text-brand-yellow">4.8 / 5</h3>
+                    <p class="mb-0 text-light opacity-75">Average Rating</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-secondary py-4 text-center mt-auto">
+        <div class="container">
+            <p class="mb-0 small">&copy; 2026 InternLocate. Assisting out-of-district students with nearby company allocations.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
