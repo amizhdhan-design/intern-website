@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternLocate - Geospatial Terminal & Satellite Calibration</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-cyan: #00f2fe;
+            --neon-blue: #4facfe;
+            --neon-purple: #8b5cf6;
+            --neon-amber: #f59e0b;
+            --neon-green: #10b981;
+            --bg-dark: #060913;
+            --panel-bg: rgba(10, 16, 32, 0.75);
+            --border-glow: rgba(0, 242, 254, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #e2e8f0;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* DIGITAL GRID & SCANLINE BACKGROUND */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+            background-size: 36px 36px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* SCANLINE ANIMATION */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.6), transparent);
+            opacity: 0.7;
+            animation: scanlineMove 4s linear infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+        @keyframes scanlineMove {
+            0% { top: -10px; }
+            100% { top: 100vh; }
+        }
+
+        /* TOP TERMINAL BAR */
+        .terminal-header {
+            position: relative;
+            z-index: 5;
+            background: rgba(6, 9, 19, 0.85);
+            border-bottom: 1px solid var(--border-glow);
+            backdrop-filter: blur(12px);
+            padding: 12px 24px;
+        }
+        .tech-font {
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1.5px;
+        }
+        .mono-font {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* 3D HOLOGRAPHIC VIEWPORT */
+        .hud-stage {
+            position: relative;
+            z-index: 2;
+            perspective: 1200px;
+            padding: 20px 10px;
+        }
+        .hud-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.1), inset 0 0 30px rgba(79, 70, 229, 0.05);
+            backdrop-filter: blur(16px);
+            position: relative;
+            transition: transform 0.15s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        /* CORNER HUD BRACKETS */
+        .hud-bracket {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--neon-cyan);
+            pointer-events: none;
+        }
+        .bracket-tl { top: 10px; left: 10px; border-top: 2px solid; border-left: 2px solid; }
+        .bracket-tr { top: 10px; right: 10px; border-top: 2px solid; border-right: 2px solid; }
+        .bracket-bl { bottom: 10px; left: 10px; border-bottom: 2px solid; border-left: 2px solid; }
+        .bracket-br { bottom: 10px; right: 10px; border-bottom: 2px solid; border-right: 2px solid; }
+
+        /* CENTER TAMIL NADU CONSTELLATION ORBITER */
+        .orbiter-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (min-width: 768px) {
+            .orbiter-wrapper { width: 380px; height: 380px; }
+        }
+
+        /* GYROSCOPE RINGS */
+        .gyro-ring-outer {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px dashed rgba(0, 242, 254, 0.35);
+            animation: spinRing 24s linear infinite;
+        }
+        .gyro-ring-middle {
+            position: absolute;
+            inset: 25px;
+            border-radius: 50%;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            animation: spinRingRev 16s linear infinite;
+        }
+        .gyro-ring-inner {
+            position: absolute;
+            inset: 55px;
+            border-radius: 50%;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-left-color: var(--neon-amber);
+            border-right-color: var(--neon-cyan);
+            animation: spinRing 8s linear infinite;
+        }
+
+        @keyframes spinRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes spinRingRev {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        /* PULSING SONAR WAVES */
+        .sonar-wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            animation: sonarPulse 3s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+            pointer-events: none;
+        }
+        .sonar-wave:nth-child(2) { animation-delay: 1s; }
+        .sonar-wave:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes sonarPulse {
+            0% { transform: scale(0.2); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        /* SATELLITE BEACON RETICLE */
+        .targeting-beacon {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+        }
+        .beacon-crosshair-h {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        }
+        .beacon-crosshair-v {
+            position: absolute;
+            height: 100%;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
+        }
+
+        /* DISTRICT CONSTELLATION NODES */
+        .tn-node {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 14px var(--neon-cyan);
+            transition: all 0.4s ease;
+        }
+        .tn-node::after {
+            content: attr(data-district);
+            position: absolute;
+            left: 14px;
+            top: -5px;
+            font-size: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            white-space: nowrap;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            background: rgba(6, 9, 19, 0.8);
+            padding: 1px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .node-active {
+            background: var(--neon-amber) !important;
+            box-shadow: 0 0 20px var(--neon-amber), 0 0 40px var(--neon-amber) !important;
+            transform: scale(1.5);
+        }
+        .node-active::after {
+            color: var(--neon-amber) !important;
+            border-color: var(--neon-amber) !important;
+            font-weight: bold;
+        }
+
+        /* TELEMETRY WIDGETS */
+        .telemetry-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 16px;
+            height: 100%;
+        }
+        .telemetry-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+            font-size: 12px;
+        }
+        .telemetry-item:last-child {
+            border-bottom: none;
+        }
+
+        /* PROGRESS COUNTER & BAR */
+        .cyber-progress-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 30px;
+            height: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+        .cyber-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00f2fe, #4facfe, #8b5cf6, #f59e0b);
+            border-radius: 30px;
+            box-shadow: 0 0 18px var(--neon-cyan);
+            transition: width 0.12s linear;
+        }
+
+        /* ACTION BUTTONS */
+        .btn-cyber {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(79, 70, 229, 0.25));
+            border: 1px solid var(--neon-cyan);
+            color: #ffffff;
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 12px 28px;
+            border-radius: 30px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-cyber:hover {
+            background: linear-gradient(135deg, var(--neon-cyan), #4facfe);
+            color: #060913;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* AUDIO TOGGLE BUTTON */
+        .btn-audio {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-audio.active {
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            background: rgba(0, 242, 254, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCANLINE EFFECT -->
+    <div class="scanline"></div>
+
+    <!-- TOP TELEMETRY BAR -->
+    <header class="terminal-header d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-satellite-dish text-warning fs-5"></i>
+                <span class="tech-font fw-bold text-white fs-6">INTERN LOCATE</span>
+                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-50 small mono-font">GEOSPATIAL TERMINAL v3.8</span>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mono-font small">
+            <button id="soundToggleBtn" onclick="toggleAudio()" class="btn-audio d-flex align-items-center gap-1">
+                <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+                <span id="soundText">AUDIO ON</span>
+            </button>
+            <div class="d-none d-md-block text-secondary">
+                <span class="text-success"><i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i>ONLINE</span>
+                &bull; TN_GRID_38: <span class="text-info">SYNCED</span>
+            </div>
+            <a href="index.html" class="text-secondary text-decoration-none hover-text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN HOLOGRAPHIC STAGE -->
+    <main class="hud-stage container-fluid px-3 px-md-5 my-auto">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xxl-11">
+                <div class="hud-card p-4 p-md-5" id="interactiveCard">
+                    
+                    <!-- CORNER BRACKETS -->
+                    <div class="hud-bracket bracket-tl"></div>
+                    <div class="hud-bracket bracket-tr"></div>
+                    <div class="hud-bracket bracket-bl"></div>
+                    <div class="hud-bracket bracket-br"></div>
+
+                    <div class="row g-4 align-items-center">
+                        
+                        <!-- LEFT PANEL: LIVE GEO-STREAM & TARGET ACQUISITION -->
+                        <div class="col-12 col-lg-3 order-2 order-lg-1">
+                            <div class="telemetry-card">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="tech-font text-info small fw-bold"><i class="fa-solid fa-crosshairs me-1"></i>TARGET ACQUISITION</span>
+                                    <span class="badge bg-dark text-warning border border-warning border-opacity-25 mono-font" id="districtLockCount">01/38</span>
+                                </div>
+
+                                <div class="p-2 bg-black bg-opacity-50 rounded-3 border border-secondary border-opacity-25 mb-3 mono-font">
+                                    <div class="small text-muted mb-1">LOCKING COORDINATE:</div>
+                                    <div class="text-warning fw-bold fs-6" id="activeCoordinate">13.0827° N, 80.2707° E</div>
+                                    <div class="small text-info mt-1" id="activeDistrictLabel">&gt; CHENNAI IT CORRIDOR</div>
+                                </div>
+
+                                <div class="small text-secondary mb-3 mono-font">
+                                    <div class="telemetry-item">
+                                        <span>GPS ACCURACY</span>
+                                        <span class="text-success fw-bold">99.8% (PINPOINT)</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <span>SIPCOT / SEZ MAPS</span>
+                                        <span class="text-info fw-bold">AUTHENTICATED</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <span>MANDATORY GATE</span>
+                                        <span class="text-warning fw-bold" id="authGateStatus">CHECKING...</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <span>DISTANCE MATRIX</span>
+                                        <span class="text-white">ACTIVE (KM ROUTING)</span>
+                                    </div>
+                                </div>
+
+                                <div class="p-2 bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded-3">
+                                    <small class="text-info mono-font d-block mb-1"><i class="fa-solid fa-fingerprint me-1"></i>STUDENT CLEARANCE:</small>
+                                    <span class="small fw-semibold text-white text-truncate d-block" id="studentSessionLabel">Verifying Session...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CENTER: 3D CONSTELLATION & ORBITAL SATELLITE HUD -->
+                        <div class="col-12 col-lg-6 text-center order-1 order-lg-2">
+                            
+                            <div class="mb-3">
+                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-50 px-3 py-1.5 rounded-pill tech-font small">
+                                    <i class="fa-solid fa-satellite me-1"></i> TAMIL NADU STATEWIDE CALIBRATION
+                                </span>
+                            </div>
+
+                            <!-- ORBITER WITH GYROSCOPES -->
+                            <div class="orbiter-wrapper my-2" id="orbiterContainer">
+                                
+                                <!-- Sonar Waves -->
+                                <div class="sonar-wave"></div>
+                                <div class="sonar-wave"></div>
+                                <div class="sonar-wave"></div>
+
+                                <!-- Gyro Rings -->
+                                <div class="gyro-ring-outer"></div>
+                                <div class="gyro-ring-middle"></div>
+                                <div class="gyro-ring-inner"></div>
+
+                                <!-- Targeting Reticle -->
+                                <div class="targeting-beacon">
+                                    <div class="beacon-crosshair-h"></div>
+                                    <div class="beacon-crosshair-v"></div>
+                                    <div class="rounded-circle border border-info border-opacity-50 p-3">
+                                        <i class="fa-solid fa-graduation-cap fa-3x text-warning"></i>
+                                    </div>
+                                </div>
+
+                                <!-- DISTRICT CONSTELLATION NODES (Positions mapped around orbiter) -->
+                                <div class="tn-node node-active" id="node-chennai" style="top: 18%; left: 78%;" data-district="Chennai"></div>
+                                <div class="tn-node" id="node-cbe" style="top: 50%; left: 16%;" data-district="Coimbatore"></div>
+                                <div class="tn-node" id="node-madurai" style="top: 72%; left: 45%;" data-district="Madurai"></div>
+                                <div class="tn-node" id="node-trichy" style="top: 48%; left: 55%;" data-district="Trichy"></div>
+                                <div class="tn-node" id="node-salem" style="top: 35%; left: 38%;" data-district="Salem"></div>
+                                <div class="tn-node" id="node-tnv" style="top: 86%; left: 40%;" data-district="Tirunelveli"></div>
+                                <div class="tn-node" id="node-tpr" style="top: 44%; left: 26%;" data-district="Tiruppur"></div>
+                                <div class="tn-node" id="node-hosur" style="top: 16%; left: 32%;" data-district="Krishnagiri"></div>
+                                <div class="tn-node" id="node-kki" style="top: 94%; left: 42%;" data-district="Kanniyakumari"></div>
+                            </div>
+
+                            <!-- LIVE STATUS LOG -->
+                            <div class="mt-3">
+                                <h3 class="tech-font fw-bold text-white mb-1" id="loadingHeadline">INITIALIZING SATELLITE...</h3>
+                                <p class="mono-font text-info small mb-3" id="loadingSubtext">Syncing 38 Tamil Nadu industrial zones & exact addresses</p>
+                            </div>
+
+                            <!-- CYBER PROGRESS BAR -->
+                            <div class="px-md-4">
+                                <div class="cyber-progress-container mb-2">
+                                    <div class="cyber-progress-bar" id="cyberProgress"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mono-font small text-secondary">
+                                    <span id="scanStatus">SCANNING: CHENNAI REGION</span>
+                                    <span class="fw-bold text-warning fs-6 tech-font" id="percentageLabel">0%</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT PANEL: VERIFICATION MATRIX & PROTOCOLS -->
+                        <div class="col-12 col-lg-3 order-3">
+                            <div class="telemetry-card">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="tech-font text-warning small fw-bold"><i class="fa-solid fa-list-check me-1"></i>SYSTEM PROTOCOLS</span>
+                                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 small mono-font">PASS</span>
+                                </div>
+
+                                <div class="d-flex flex-column gap-2 mb-4 mono-font small" id="protocolList">
+                                    <div class="p-2 bg-black bg-opacity-40 rounded-2 border border-secondary border-opacity-25 d-flex align-items-center gap-2" id="p1">
+                                        <i class="fa-solid fa-circle-notch fa-spin text-info" id="p1-icon"></i>
+                                        <span class="text-light">38 TN Districts Catalog</span>
+                                    </div>
+                                    <div class="p-2 bg-black bg-opacity-40 rounded-2 border border-secondary border-opacity-25 d-flex align-items-center gap-2" id="p2">
+                                        <i class="fa-regular fa-circle text-muted" id="p2-icon"></i>
+                                        <span class="text-secondary">All 10 Industry Sectors</span>
+                                    </div>
+                                    <div class="p-2 bg-black bg-opacity-40 rounded-2 border border-secondary border-opacity-25 d-flex align-items-center gap-2" id="p3">
+                                        <i class="fa-regular fa-circle text-muted" id="p3-icon"></i>
+                                        <span class="text-secondary">Exact Postal Pincodes</span>
+                                    </div>
+                                    <div class="p-2 bg-black bg-opacity-40 rounded-2 border border-secondary border-opacity-25 d-flex align-items-center gap-2" id="p4">
+                                        <i class="fa-regular fa-circle text-muted" id="p4-icon"></i>
+                                        <span class="text-secondary">Live Google Maps Links</span>
+                                    </div>
+                                    <div class="p-2 bg-black bg-opacity-40 rounded-2 border border-secondary border-opacity-25 d-flex align-items-center gap-2" id="p5">
+                                        <i class="fa-regular fa-circle text-muted" id="p5-icon"></i>
+                                        <span class="text-secondary">Mandatory Login Barrier</span>
+                                    </div>
+                                </div>
+
+                                <!-- PROCEED BUTTON (Unlocked at 100% or clickable anytime) -->
+                                <button onclick="launchTargetPage()" class="btn-cyber w-100 justify-content-center" id="launchBtn">
+                                    <span>EXPLORE DIRECTORY</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER TELEMETRY STATUS -->
+    <footer class="text-center py-3 text-secondary small mono-font border-top border-secondary border-opacity-10">
+        &copy; 2026 InternLocate &bull; Tamil Nadu Statewide Industrial Internship Telemetry System &bull; All 38 Districts Calibrated
+    </footer>
+
+    <script src="auth-session.js"></script>
+    <script>
+        // 1. AUDIO SYNTHESIS VIA NATIVE WEB AUDIO API (No external sound files required!)
+        let audioEnabled = true;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSciFiBeep(freq = 880, duration = 0.05, type = 'sine') {
+            if (!audioEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                // Audio not permitted yet
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const soundBtn = document.getElementById("soundToggleBtn");
+            const soundIcon = document.getElementById("soundIcon");
+            const soundText = document.getElementById("soundText");
+
+            if (audioEnabled) {
+                soundBtn.classList.add("active");
+                soundIcon.className = "fa-solid fa-volume-high";
+                soundText.innerText = "AUDIO ON";
+                playSciFiBeep(1200, 0.1);
+            } else {
+                soundBtn.classList.remove("active");
+                soundIcon.className = "fa-solid fa-volume-xmark";
+                soundText.innerText = "AUDIO OFF";
+            }
+        }
+
+        // 2. 3D CARD PARALLAX INTERACTION ON MOUSE MOVE
+        const interactiveCard = document.getElementById("interactiveCard");
+        window.addEventListener("mousemove", (e) => {
+            if (window.innerWidth < 992) return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+            interactiveCard.style.transform = `perspective(1200px) rotateY(${-xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Reset tilt on mouse leave
+        window.addEventListener("mouseleave", () => {
+            interactiveCard.style.transform = `perspective(1200px) rotateY(0deg) rotateX(0deg)`;
+        });
+
+        // 3. DISTRICT ROTATION DATABASE FOR REAL-TIME TELEMETRY
+        const DISTRICT_TELEMETRY = [
+            { name: "Chennai", coord: "13.0827° N, 80.2707° E", sector: "TIDEL OMR IT & AUTOMOTIVE", node: "node-chennai", num: "01/38" },
+            { name: "Coimbatore", coord: "11.0168° N, 76.9558° E", sector: "ELCOT SEZ & ROBOTICS", node: "node-cbe", num: "04/38" },
+            { name: "Madurai", coord: "09.9252° N, 78.1198° E", sector: "ILANDHAIKULAM IT & TVS MOBILITY", node: "node-madurai", num: "14/38" },
+            { name: "Tiruchirappalli", coord: "10.7905° N, 78.7047° E", sector: "BHEL BOILERS & CIVIL INFRA", node: "node-trichy", num: "29/38" },
+            { name: "Salem", coord: "11.6643° N, 78.1460° E", sector: "SAIL STEEL & SAGO TECH", node: "node-salem", num: "23/38" },
+            { name: "Tiruppur", coord: "11.1085° N, 77.3411° E", sector: "TEA COMPLEX KNITWEAR CLUSTER", node: "node-tpr", num: "32/38" },
+            { name: "Krishnagiri", coord: "12.5186° N, 78.2137° E", sector: "HOSUR SIPCOT EV & AUTOTECH", node: "node-hosur", num: "13/38" },
+            { name: "Tirunelveli", coord: "08.7139° N, 77.7567° E", sector: "GANGAIKONDAN SUZLON WIND", node: "node-tnv", num: "30/38" },
+            { name: "Kanniyakumari", coord: "08.0883° N, 77.5385° E", sector: "MUPPANDAL RENEWABLE GRID", node: "node-kki", num: "11/38" }
+        ];
+
+        // 4. PROTOCOL MILESTONES & PROGRESS LOOP
+        const protocols = [
+            { pct: 20, id: "p1", name: "38 TN Districts Catalog" },
+            { pct: 40, id: "p2", name: "All 10 Industry Sectors" },
+            { pct: 60, id: "p3", name: "Exact Postal Pincodes" },
+            { pct: 80, id: "p4", name: "Live Google Maps Links" },
+            { pct: 98, id: "p5", name: "Mandatory Login Barrier" }
+        ];
+
+        let currentProgress = 0;
+        let districtCycleIdx = 0;
+        const progressBar = document.getElementById("cyberProgress");
+        const percentageLabel = document.getElementById("percentageLabel");
+        const activeCoordinate = document.getElementById("activeCoordinate");
+        const activeDistrictLabel = document.getElementById("activeDistrictLabel");
+        const districtLockCount = document.getElementById("districtLockCount");
+        const scanStatus = document.getElementById("scanStatus");
+        const loadingHeadline = document.getElementById("loadingHeadline");
+        const loadingSubtext = document.getElementById("loadingSubtext");
+        const authGateStatus = document.getElementById("authGateStatus");
+        const studentSessionLabel = document.getElementById("studentSessionLabel");
+
+        // Verify session status on entry
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = authSession.getUser();
+            if (user && user.fullName) {
+                authGateStatus.innerText = "AUTHENTICATED";
+                authGateStatus.className = "text-success fw-bold";
+                studentSessionLabel.innerText = `${user.fullName} (${user.department ? user.department.split('/')[0] : 'Verified'})`;
+            } else {
+                authGateStatus.innerText = "MANDATORY ON SEARCH";
+                authGateStatus.className = "text-warning fw-bold";
+                studentSessionLabel.innerText = "Guest Student (Login Required)";
+            }
+        });
+
+        // Animation Loop
+        const interval = setInterval(() => {
+            currentProgress += 2;
+            if (currentProgress > 100) currentProgress = 100;
+
+            progressBar.style.width = currentProgress + "%";
+            percentageLabel.innerText = currentProgress + "%";
+
+            // Periodic sci-fi sound pulse
+            if (currentProgress % 10 === 0) {
+                playSciFiBeep(600 + (currentProgress * 8), 0.04, 'sine');
+            }
+
+            // Cycle District Targeting
+            if (currentProgress % 11 === 0 && districtCycleIdx < DISTRICT_TELEMETRY.length) {
+                const item = DISTRICT_TELEMETRY[districtCycleIdx % DISTRICT_TELEMETRY.length];
+                activeCoordinate.innerText = item.coord;
+                activeDistrictLabel.innerText = `> ${item.name.toUpperCase()} [${item.sector}]`;
+                districtLockCount.innerText = item.num;
+                scanStatus.innerText = `CALIBRATING: ${item.name.toUpperCase()} REGION`;
+
+                // Highlight corresponding node
+                document.querySelectorAll(".tn-node").forEach(n => n.classList.remove("node-active"));
+                const targetNode = document.getElementById(item.node);
+                if (targetNode) targetNode.classList.add("node-active");
+
+                playSciFiBeep(1400, 0.06, 'triangle');
+                districtCycleIdx++;
+            }
+
+            // Complete Protocols as progress passes thresholds
+            protocols.forEach(proto => {
+                if (currentProgress >= proto.pct) {
+                    const row = document.getElementById(proto.id);
+                    const icon = document.getElementById(`${proto.id}-icon`);
+                    if (row && icon && !row.classList.contains("completed")) {
+                        row.classList.add("completed");
+                        row.style.borderColor = "rgba(0, 242, 254, 0.5)";
+                        row.style.background = "rgba(0, 242, 254, 0.08)";
+                        icon.className = "fa-solid fa-circle-check text-info";
+                        row.querySelector("span").className = "text-white fw-semibold";
+                    }
+                }
+            });
+
+            // Status Headline updates
+            if (currentProgress === 40) {
+                loadingHeadline.innerText = "INDEXING 38 DISTRICTS...";
+                loadingSubtext.innerText = "Mapping SIPCOT, SIDCO, and IT Park exact coordinates";
+            } else if (currentProgress === 70) {
+                loadingHeadline.innerText = "VALIDATING SECTORS & MAPS...";
+                loadingSubtext.innerText = "Generating direct Google Maps navigation links";
+            } else if (currentProgress >= 100) {
+                clearInterval(interval);
+                loadingHeadline.innerText = "CALIBRATION COMPLETE";
+                loadingHeadline.style.color = "var(--neon-cyan)";
+                loadingSubtext.innerText = "Tamil Nadu Industrial Database Ready & Locked";
+                scanStatus.innerText = "STATUS: SYSTEM LOCKED & OPTIMAL";
+                percentageLabel.className = "fw-bold text-success fs-6 tech-font";
+
+                const launchBtn = document.getElementById("launchBtn");
+                launchBtn.style.background = "linear-gradient(135deg, #00f2fe, #4facfe)";
+                launchBtn.style.color = "#060913";
+                launchBtn.style.boxShadow = "0 0 35px rgba(0, 242, 254, 0.8)";
+                launchBtn.innerHTML = `<span>ENTER WORKSPACE</span> <i class="fa-solid fa-arrow-right"></i>`;
+
+                playSciFiBeep(1760, 0.15, 'square');
+
+                // Auto launch after 1.2s delay
+                setTimeout(() => {
+                    launchTargetPage();
+                }, 1200);
+            }
+        }, 50);
+
+        // Handoff to directory or login
+        function launchTargetPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectTarget = urlParams.get("redirect") || "companies.html";
+
+            if (authSession.isLoggedIn()) {
+                window.location.href = redirectTarget;
+            } else {
+                // If not logged in, route them smoothly to login page
+                window.location.href = `login.html?redirect=${encodeURIComponent(redirectTarget)}&authRequired=1`;
+            }
+        }
+    </script>
+</body>
+</html>

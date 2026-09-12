@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Support - InternLocate</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-primary: #4f46e5;
+            --brand-hover: #4338ca;
+            --brand-yellow: #fde047;
+        }
+        body { background-color: #f8fafc; }
+        .bg-brand-primary { background-color: var(--brand-primary) !important; }
+        .text-brand-yellow { color: var(--brand-yellow) !important; }
+        .btn-brand { background-color: var(--brand-primary); color: #ffffff; border: none; }
+        .btn-brand:hover { background-color: var(--brand-hover); color: #ffffff; }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- HEADER (NO LOCATION SEARCH ON CONTACT PAGE) -->
+    <header class="bg-brand-primary text-white shadow-sm sticky-top">
+        <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light border-0 fs-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftMenuSidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <a href="index.html" class="d-flex align-items-center text-white text-decoration-none">
+                    <i class="fa-solid fa-graduation-cap fa-2x text-brand-yellow me-2"></i>
+                    <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
+                </a>
+            </div>
+            <div id="sessionUserDisplay"></div>
+        </div>
+    </header>
+
+    <!-- LEFT MENU SIDEBAR -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="leftMenuSidebar">
+        <div class="offcanvas-header bg-brand-primary text-white">
+            <h5 class="offcanvas-title fw-bold"><i class="fa-solid fa-graduation-cap text-brand-yellow me-2"></i>InternLocate</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="list-group list-group-flush fw-semibold">
+                <a href="index.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-house me-3 text-primary"></i>Home</a>
+                <a href="companies.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-building me-3 text-primary"></i>Companies Directory</a>
+                <a href="loading.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-satellite-dish me-3 text-primary"></i>Geospatial Terminal</a>
+                <a href="login.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-id-badge me-3 text-primary"></i>Student Login / Register</a>
+                <a href="about.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-circle-info me-3 text-primary"></i>About Platform</a>
+                <a href="contact.html" class="list-group-item list-group-item-action py-3 border-0 active bg-primary-subtle text-primary"><i class="fa-solid fa-envelope me-3 text-primary"></i>Contact Support</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTACT CONTENT CONTAINER-FLUID -->
+    <main class="container-fluid px-4 py-5 flex-grow-1">
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Admin & Contact Channels -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm p-4 rounded-4 bg-white h-100">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge bg-primary-subtle text-primary px-3 py-1.5 rounded-pill fw-bold small">
+                            <i class="fa-solid fa-user-shield me-1"></i> Admin & Support Desk
+                        </span>
+                        <span class="badge bg-warning-subtle text-warning-emphasis px-3 py-1.5 rounded-pill fw-bold small">
+                            <i class="fa-solid fa-location-dot me-1"></i> Erode District
+                        </span>
+                    </div>
+
+                    <h4 class="fw-bold mb-3 text-dark">Platform Administration</h4>
+                    
+                    <!-- Admin Profile Box -->
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                <i class="fa-solid fa-user-graduate fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-0">Amizhdhan R.</h6>
+                                <small class="text-primary fw-semibold">Platform Administrator & Creator</small>
+                            </div>
+                        </div>
+                        <div class="small text-secondary ps-1">
+                            <p class="mb-1"><i class="fa-solid fa-graduation-cap text-warning me-2"></i><strong>College:</strong> Kongu Engineering College (KEC)</p>
+                            <p class="mb-1"><i class="fa-solid fa-code text-info me-2"></i><strong>Dept:</strong> Computer Science & Engineering</p>
+                            <p class="mb-0"><i class="fa-solid fa-map-pin text-danger me-2"></i><strong>District:</strong> Erode District, Tamil Nadu</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-primary mb-1"><i class="fa-solid fa-building-columns me-2"></i>Official Admin Office Address</h6>
+                        <p class="text-muted small mb-0">
+                            Department of Computer Science & Engineering,<br>
+                            <strong>Kongu Engineering College Campus</strong>,<br>
+                            Thoppupalayam, Perundurai,<br>
+                            Erode District, Tamil Nadu - 638060.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-primary mb-1"><i class="fa-solid fa-headset me-2"></i>Erode Admin & Support Helplines</h6>
+                        <p class="text-muted small mb-0">Admin Direct: +91 98427 12345</p>
+                        <p class="text-muted small mb-0">KEC Campus Desk: +91 (0) 4294 226 555</p>
+                        <p class="text-muted small mb-0">Statewide Student Assistance: 1800-425-TN-INTERN</p>
+                    </div>
+
+                    <div>
+                        <h6 class="fw-bold text-primary mb-1"><i class="fa-solid fa-envelope-open-text me-2"></i>Direct Email Support</h6>
+                        <p class="text-muted small mb-0">admin@internlocate.org</p>
+                        <p class="text-muted small mb-0">amizhdhan.admin@kongu.edu</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Inquiry Form -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm p-4 rounded-4 bg-white">
+                    <h4 class="fw-bold mb-1">Send Support Message</h4>
+                    <p class="text-muted small mb-4">Inquire about relocation support, route planning, or company verification</p>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Message sent! A student coordinator will respond to your registered email shortly.');">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fs-7 fw-semibold text-secondary">YOUR NAME</label>
+                                <input type="text" class="form-control" required placeholder="John Doe">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fs-7 fw-semibold text-secondary">GMAIL ADDRESS</label>
+                                <input type="email" class="form-control" required placeholder="john@gmail.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fs-7 fw-semibold text-secondary">COLLEGE NAME</label>
+                                <input type="text" class="form-control" required placeholder="Institute Name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fs-7 fw-semibold text-secondary">TARGET DISTRICT</label>
+                                <input type="text" class="form-control" required placeholder="e.g. Coimbatore">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fs-7 fw-semibold text-secondary">INQUIRY MESSAGE</label>
+                                <textarea class="form-control" rows="4" required placeholder="Describe your query in detail..."></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-brand w-100 py-2.5 fw-bold rounded-3">
+                                    <i class="fa-solid fa-paper-plane me-2"></i>Send Support Request
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="mt-5 max-w-4xl mx-auto col-lg-11">
+            <h4 class="fw-bold text-center mb-4">Frequently Asked Questions</h4>
+            <div class="accordion accordion-flush rounded-4 shadow-sm overflow-hidden" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How are company locations verified on InternLocate?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-secondary small">
+                            All company listings undergo physical and institutional verification with local district industrial centers and university placement cells before being published on InternLocate.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Do I need to sign in every time I open the site?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-secondary small">
+                            No! Once you enter your priority student details on your first visit, your session is saved persistently in your browser. You will not be prompted to log in again unless you manually sign out.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-secondary py-4 text-center mt-auto">
+        <div class="container-fluid px-4">
+            <p class="mb-0 small">&copy; 2026 InternLocate. Assisting out-of-district students with nearby company allocations.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth-session.js"></script>
+</body>
+</html>

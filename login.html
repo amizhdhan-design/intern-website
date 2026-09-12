@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login & Registration - InternLocate</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- INSTANT ONE-TIME SESSION BYPASS: If logged in, no need to login or sign up another time -->
+    <script>
+        (function() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get("logout") !== "1") {
+                    const saved = localStorage.getItem("internlocate_student");
+                    if (saved) {
+                        const user = JSON.parse(saved);
+                        if (user && (user.fullName || user.email)) {
+                            const target = urlParams.get("redirect") || "companies.html";
+                            window.location.replace(target);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        })();
+    </script>
+
+    <style>
+        :root {
+            --brand-primary: #4f46e5;
+            --brand-hover: #4338ca;
+            --brand-yellow: #fde047;
+            --brand-dark: #0f172a;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            color: #1e293b;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .login-card {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+        }
+        .btn-brand {
+            background-color: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-brand:hover {
+            background-color: var(--brand-hover);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+        }
+        .btn-demo {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            font-weight: 700;
+        }
+        .btn-demo:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+        }
+        .nav-pills .nav-link {
+            border-radius: 12px;
+            color: #64748b;
+            font-weight: 700;
+            padding: 10px 20px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--brand-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        }
+        .badge-notice {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+        }
+        .info-sidebar {
+            background: linear-gradient(160deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+        }
+        .benefit-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fde047;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column justify-content-between p-3 p-md-4">
+
+    <!-- TOP HEADER -->
+    <header class="container-fluid d-flex justify-content-between align-items-center mb-4 text-white">
+        <a href="index.html" class="d-flex align-items-center text-white text-decoration-none">
+            <i class="fa-solid fa-graduation-cap fa-2x text-warning me-2"></i>
+            <div>
+                <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
+                <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-25 ms-2 small">Tamil Nadu Edition</span>
+            </div>
+        </a>
+        <div>
+            <a href="index.html" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN LOGIN/REGISTRATION CARD -->
+    <main class="container my-auto">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-11">
+                <div class="login-card">
+                    <div class="row g-0">
+                        
+                        <!-- LEFT FORM COLUMN -->
+                        <div class="col-12 col-lg-7 p-4 p-md-5">
+                            
+                            <!-- MANDATORY NOTIFICATION ALERT (Visible if redirected or prompted) -->
+                            <div id="mandatoryAlert" class="alert badge-notice d-flex align-items-center gap-3 p-3 mb-4">
+                                <i class="fa-solid fa-shield-halved fa-2x text-danger flex-shrink-0"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-danger">Student Authentication Mandatory</h6>
+                                    <p class="small mb-0 text-secondary">
+                                        Per Tamil Nadu Industrial & Higher Education Training guidelines, students must be logged in to search companies and access exact facility addresses.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- 1-CLICK QUICK DEMO LOGIN BUTTON -->
+                            <div class="card bg-warning-subtle border-warning border-opacity-50 rounded-4 p-3 mb-4 shadow-sm">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                    <div>
+                                        <h6 class="fw-bold text-dark mb-1"><i class="fa-solid fa-bolt text-warning me-2"></i>Testing or Evaluating the Platform?</h6>
+                                        <small class="text-secondary">Click below to log in instantly with pre-verified student credentials.</small>
+                                    </div>
+                                    <button type="button" onclick="triggerDemoLogin()" class="btn btn-demo rounded-pill px-4 py-2">
+                                        <i class="fa-solid fa-rocket me-2"></i>1-Click Quick Demo Login
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- TAB SELECTOR: SIGN IN VS SIGN UP -->
+                            <ul class="nav nav-pills nav-fill mb-4 bg-light p-1.5 rounded-4" id="authTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#loginTabContent" type="button" role="tab">
+                                        <i class="fa-solid fa-right-to-bracket me-2"></i>Student Sign In
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#registerTabContent" type="button" role="tab">
+                                        <i class="fa-solid fa-user-plus me-2"></i>New Registration
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="authTabsContent">
+                                
+                                <!-- TAB 1: STUDENT LOGIN -->
+                                <div class="tab-pane fade show active" id="loginTabContent" role="tabpanel">
+                                    <form onsubmit="handleStudentLogin(event)">
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-bold text-secondary">EMAIL ADDRESS OR REGISTRATION NUMBER</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                                <input type="email" id="loginEmail" class="form-control" placeholder="amizhdhan.admin@kongu.edu" required value="amizhdhan.admin@kongu.edu">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <label class="form-label small fw-bold text-secondary">PASSWORD</label>
+                                                <a href="#" onclick="alert('For demo evaluation, any password or the Quick Demo Login button works.'); return false;" class="small text-primary text-decoration-none">Forgot Password?</a>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+                                                <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required value="Intern@2026">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                                                <label class="form-check-label small text-muted" for="rememberMe">Remember me on this browser</label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-brand w-100 py-2.5 rounded-3 fw-bold fs-6">
+                                            <i class="fa-solid fa-lock-open me-2"></i>Sign In & Unlock Company Directory
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <!-- TAB 2: STUDENT REGISTRATION -->
+                                <div class="tab-pane fade" id="registerTabContent" role="tabpanel">
+                                    <form onsubmit="handleStudentRegister(event)">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold text-secondary">FULL NAME *</label>
+                                                <input type="text" id="regFullName" class="form-control" required placeholder="e.g. Senthil Nathan">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold text-secondary">TAMIL NADU COLLEGE *</label>
+                                                <select id="regCollege" class="form-select" required>
+                                                    <option value="" selected disabled>Choose College...</option>
+                                                    <option>Anna University (CEG Campus, Guindy)</option>
+                                                    <option>Anna University (MIT Campus, Chromepet)</option>
+                                                    <option>PSG College of Technology, Coimbatore</option>
+                                                    <option>National Institute of Technology (NIT), Trichy</option>
+                                                    <option>SSN College of Engineering, Chennai</option>
+                                                    <option>Thiagarajar College of Engineering (TCE), Madurai</option>
+                                                    <option>Coimbatore Institute of Technology (CIT)</option>
+                                                    <option>Government College of Technology (GCT), Coimbatore</option>
+                                                    <option>Kongu Engineering College, Perundurai</option>
+                                                    <option>Vellore Institute of Technology (VIT), Vellore</option>
+                                                    <option>SASTRA Deemed University, Thanjavur</option>
+                                                    <option>Bannari Amman Institute of Technology, Sathyamangalam</option>
+                                                    <option>Mepco Schlenk Engineering College, Sivakasi</option>
+                                                    <option>KPR Institute of Engineering, Coimbatore</option>
+                                                    <option>Government College of Engineering, Salem</option>
+                                                    <option>Alagappa Chettiar Govt College of Engg, Karaikudi</option>
+                                                    <option>Other Recognized College in Tamil Nadu</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-bold text-secondary">YEAR OF STUDY *</label>
+                                                <select id="regYear" class="form-select" required>
+                                                    <option value="" selected disabled>Select Year</option>
+                                                    <option>1st Year</option>
+                                                    <option>2nd Year</option>
+                                                    <option>3rd Year</option>
+                                                    <option>4th Year / Final</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-bold text-secondary">DEPARTMENT *</label>
+                                                <select id="regDept" class="form-select" required>
+                                                    <option value="" selected disabled>Select Dept</option>
+                                                    <option>Computer Science & Engineering</option>
+                                                    <option>Information Technology</option>
+                                                    <option>Electronics & Communication (ECE)</option>
+                                                    <option>Electrical & Electronics (EEE)</option>
+                                                    <option>Mechanical Engineering</option>
+                                                    <option>Civil & Structural Engineering</option>
+                                                    <option>Chemical Engineering</option>
+                                                    <option>Biotechnology & Biomedical</option>
+                                                    <option>Textile & Fashion Technology</option>
+                                                    <option>Automobile Engineering</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-bold text-secondary">HOME DISTRICT *</label>
+                                                <select id="regHomeDistrict" class="form-select" required>
+                                                    <option value="" selected disabled>Select District</option>
+                                                    <option>Chennai</option><option>Coimbatore</option><option>Madurai</option>
+                                                    <option>Tiruchirappalli</option><option>Salem</option><option>Tirunelveli</option>
+                                                    <option>Tiruppur</option><option>Erode</option><option>Vellore</option>
+                                                    <option>Kancheepuram</option><option>Chengalpattu</option><option>Krishnagiri</option>
+                                                    <option>Dindigul</option><option>Thanjavur</option><option>Thoothukudi</option>
+                                                    <option>Kanniyakumari</option><option>Cuddalore</option><option>Karur</option>
+                                                    <option>Namakkal</option><option>Virudhunagar</option><option>Ranipet</option>
+                                                    <option>Tenkasi</option><option>Tiruvallur</option><option>Tiruvannamalai</option>
+                                                    <option>Pudukkottai</option><option>Sivaganga</option><option>The Nilgiris</option>
+                                                    <option>Ariyalur</option><option>Perambalur</option><option>Ramanathapuram</option>
+                                                    <option>Theni</option><option>Dharmapuri</option><option>Kallakurichi</option>
+                                                    <option>Mayiladuthurai</option><option>Nagapattinam</option><option>Tirupathur</option>
+                                                    <option>Tiruvarur</option><option>Viluppuram</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold text-secondary">PHONE NUMBER *</label>
+                                                <input type="tel" id="regPhone" class="form-control" required placeholder="+91 9876543210">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold text-secondary">GMAIL / COLLEGE EMAIL *</label>
+                                                <input type="email" id="regEmail" class="form-control" required placeholder="student@gmail.com">
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label small fw-bold text-secondary">PERMANENT ADDRESS *</label>
+                                                <input type="text" id="regAddress" class="form-control" required placeholder="Door No., Street, City/Town, Pincode">
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label small fw-bold text-secondary">CREATE PASSWORD *</label>
+                                                <input type="password" id="regPassword" class="form-control" required placeholder="Minimum 6 characters">
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <button type="submit" class="btn btn-brand w-100 py-2.5 rounded-3 fw-bold fs-6">
+                                                <i class="fa-solid fa-id-card me-2"></i>Create Student Account & Continue
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT INFORMATIONAL SIDEBAR -->
+                        <div class="col-12 col-lg-5 info-sidebar p-4 p-md-5 d-flex flex-column justify-content-between">
+                            <div>
+                                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold mb-3">TN Industrial Portal</span>
+                                <h3 class="fw-bold text-white mb-3">Why is Login Mandatory Before Searching?</h3>
+                                <p class="text-white text-opacity-75 small mb-4">
+                                    InternLocate bridges engineering, arts, and polytechnic students across Tamil Nadu with verified industrial facilities. Authentic authentication guarantees:
+                                </p>
+
+                                <div class="d-flex flex-column gap-3 mb-4">
+                                    <div class="d-flex gap-3 align-items-start">
+                                        <div class="benefit-icon"><i class="fa-solid fa-map-pin"></i></div>
+                                        <div>
+                                            <h6 class="fw-bold text-white mb-1">Exact Address & Maps Access</h6>
+                                            <p class="small text-white text-opacity-75 mb-0">Verified students unlock exact SIPCOT, SIDCO, and IT Park coordinates with direct Google Maps routes.</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-3 align-items-start">
+                                        <div class="benefit-icon"><i class="fa-solid fa-building-shield"></i></div>
+                                        <div>
+                                            <h6 class="fw-bold text-white mb-1">Industrial Clearance & Safety</h6>
+                                            <p class="small text-white text-opacity-75 mb-0">Protects manufacturing and boiler plants from unverified access by confirming current college enrolment.</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-3 align-items-start">
+                                        <div class="benefit-icon"><i class="fa-solid fa-file-contract"></i></div>
+                                        <div>
+                                            <h6 class="fw-bold text-white mb-1">1-Click Fast Internship Application</h6>
+                                            <p class="small text-white text-opacity-75 mb-0">Your profile pre-fills internship letters, college bonafide paperwork, and supervisor approvals automatically.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10">
+                                <div class="row text-center g-2">
+                                    <div class="col-4">
+                                        <h5 class="fw-bold text-warning mb-0">38</h5>
+                                        <small class="text-white text-opacity-75" style="font-size: 11px;">Districts</small>
+                                    </div>
+                                    <div class="col-4 border-start border-end border-white border-opacity-25">
+                                        <h5 class="fw-bold text-warning mb-0">10+</h5>
+                                        <small class="text-white text-opacity-75" style="font-size: 11px;">Sectors</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h5 class="fw-bold text-warning mb-0">100%</h5>
+                                        <small class="text-white text-opacity-75" style="font-size: 11px;">Free Access</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-white-50 small py-3 mt-4">
+        &copy; 2026 InternLocate. Assisting Tamil Nadu students with localized industrial internships & in-plant allocations.
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth-session.js"></script>
+
+    <script>
+        // Check destination redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTarget = urlParams.get("redirect") || "companies.html";
+
+        // If user already logged in, redirect right away unless logging out
+        if (urlParams.get("logout") === "1") {
+            // Already logged out
+        } else if (authSession.isLoggedIn()) {
+            window.location.href = redirectTarget;
+        }
+
+        // Quick 1-Click Demo Login
+        function triggerDemoLogin() {
+            authSession.loginAsDemoStudent(redirectTarget);
+        }
+
+        // Handle existing login
+        function handleStudentLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById("loginEmail").value.trim();
+            const user = {
+                fullName: email.split("@")[0].replace(".", " ").toUpperCase(),
+                email: email,
+                college: "Kongu Engineering College, Perundurai",
+                department: "Computer Science & Engineering",
+                year: "3rd Year",
+                homeDistrict: "Erode",
+                address: "Kongu Engineering College Campus, Perundurai, Erode District - 638060"
+            };
+            authSession.loginUser(user, redirectTarget);
+        }
+
+        // Handle new registration
+        function handleStudentRegister(e) {
+            e.preventDefault();
+            const newUser = {
+                fullName: document.getElementById("regFullName").value.trim(),
+                college: document.getElementById("regCollege").value,
+                year: document.getElementById("regYear").value,
+                department: document.getElementById("regDept").value,
+                homeDistrict: document.getElementById("regHomeDistrict").value,
+                phone: document.getElementById("regPhone").value.trim(),
+                email: document.getElementById("regEmail").value.trim(),
+                address: document.getElementById("regAddress").value.trim()
+            };
+            authSession.loginUser(newUser, redirectTarget);
+        }
+    </script>
+</body>
+</html>

@@ -3,235 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InternLocate - Find Nearby Internships & In-Plant Training</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>InternLocate - Tamil Nadu Industrial Training & Internship Portal</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
+    
+    <style>
+        :root {
+            --brand-primary: #4f46e5;
+            --brand-hover: #4338ca;
+            --brand-yellow: #fde047;
+            --brand-dark: #0f172a;
+        }
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .bg-brand-primary {
+            background-color: var(--brand-primary) !important;
+        }
+        .text-brand-yellow {
+            color: var(--brand-yellow) !important;
+        }
+        .btn-brand {
+            background-color: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-brand:hover {
+            background-color: var(--brand-hover);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+        }
 
-    <!-- TOP MENU BAR -->
-    <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-40">
-        <div class="container-fluid px-6 py-4 flex justify-between items-center">
-            <!-- Brand Logo / Title -->
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-graduation-cap text-2xl text-yellow-300"></i>
-                <span class="text-xl font-bold tracking-wide">InternLocate</span>
+        /* GEOSPATIAL ORBITAL PRELOADER STYLES */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #060913;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .preloader-gyro {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .gyro-ring-1 {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px dashed rgba(0, 242, 254, 0.5);
+            animation: spinRing 8s linear infinite;
+        }
+        .gyro-ring-2 {
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: #f59e0b;
+            border-bottom-color: #00f2fe;
+            animation: spinRingRev 4s linear infinite;
+        }
+        .gyro-core {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.35) 0%, transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fde047;
+            font-size: 24px;
+            animation: pulseGlow 1.5s infinite ease-in-out;
+        }
+        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spinRingRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+
+        /* HERO SECTION */
+        .hero-section {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);
+            color: white;
+            padding: 70px 20px 60px;
+            border-radius: 0 0 32px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.15);
+            top: -100px;
+            right: -50px;
+            filter: blur(50px);
+        }
+        .search-container-hero {
+            background: white;
+            border-radius: 20px;
+            padding: 10px 14px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 820px;
+            margin: 30px auto 0;
+        }
+
+        /* HOW IT WORKS PROCESS */
+        .intern-process-section {
+            position: relative;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7ff 100%);
+            border-radius: 28px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 12px 35px rgba(47, 44, 130, 0.06);
+        }
+        .process-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #fff3cd;
+            color: #9a6b00;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .process-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #172033;
+        }
+        .process-wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .process-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 20px;
+            border: 1px solid #e8eaf3;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .process-card:hover {
+            transform: translateY(-8px);
+            border-color: #5142df;
+            box-shadow: 0 16px 32px rgba(81, 66, 223, 0.12);
+        }
+        .process-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 16px;
+            border-radius: 16px;
+            background: #eef2ff;
+            color: #5142df;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .step-label {
+            color: #5142df;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* DISTRICT TILES */
+        .district-tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 60px;
+            padding: 8px 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            text-align: center;
+        }
+        .district-tile:hover {
+            color: var(--brand-primary);
+            border-color: var(--brand-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.15);
+            background: #fdfefe;
+        }
+        .district-tile i {
+            color: var(--brand-primary);
+        }
+
+        /* STATS SECTION */
+        .stats-section {
+            background: linear-gradient(135deg, #eef2ff, #ffffff);
+            border: 1px solid #e0e7ff;
+        }
+        .stat-number {
+            color: var(--brand-primary);
+            font-size: 32px;
+            font-weight: 800;
+        }
+        .stat-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 992px) {
+            .process-wrapper { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 576px) {
+            .process-wrapper { grid-template-columns: 1fr; }
+            .hero-section { padding: 45px 15px 40px; }
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- GEOSPATIAL ORBITAL LOADING SCREEN -->
+    <div id="preloader">
+        <div class="preloader-gyro">
+            <div class="gyro-ring-1"></div>
+            <div class="gyro-ring-2"></div>
+            <div class="gyro-core">
+                <i class="fa-solid fa-satellite-dish"></i>
+            </div>
+        </div>
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-white border-opacity-15 mb-2">
+            <span class="badge bg-warning text-dark small fw-bold">GPS SYNC</span>
+            <span class="small text-light">Tamil Nadu Geo-Terminal</span>
+        </div>
+        <h4 class="fw-bold tracking-wide text-white mb-1">InternLocate</h4>
+        <p class="small text-secondary mb-0">Calibrating 38 Districts & Exact Addresses...</p>
+    </div>
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="bg-brand-primary text-white shadow-sm sticky-top">
+        <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light border-0 fs-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftMenuSidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <a href="index.html" class="d-flex align-items-center text-white text-decoration-none">
+                    <i class="fa-solid fa-graduation-cap fa-2x text-brand-yellow me-2"></i>
+                    <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
+                </a>
             </div>
 
-            <!-- Navigation Links -->
-<nav class="hidden md:flex space-x-8 font-medium">
-    <a href="index.html" class="hover:text-yellow-300 transition-colors">Home</a>
-    <a href="#companies" class="hover:text-yellow-300 transition-colors">Companies</a>
-    <a href="about.html" class="hover:text-yellow-300 transition-colors">About Services</a>
-    <a href="#contact" class="hover:text-yellow-300 transition-colors">Contact</a>
-</nav>
-
-            <!-- Search Bar for Location -->
-            <div class="relative w-64">
-                <input type="text" placeholder="Search by district/city..." class="w-full pl-9 pr-4 py-1.5 rounded-full text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-300">
-                <i class="fa-solid fa-location-dot absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+            <div class="d-flex align-items-center gap-3">
+                <!-- User Profile Session Badge or Login Button -->
+                <div id="sessionUserDisplay"></div>
+                
+                <a href="loading.html" class="btn btn-outline-light btn-sm rounded-pill px-3 d-none d-md-inline-block">
+                    <i class="fa-solid fa-satellite-dish me-1"></i> Geospatial Terminal
+                </a>
+                <a href="companies.html" class="btn btn-light btn-sm rounded-pill px-3 fw-bold text-primary shadow-sm">
+                    <i class="fa-solid fa-building me-1"></i> Explore Directory
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white py-12 px-6 text-center">
-        <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Find Training Near Your Location</h1>
-        <p class="text-indigo-100 text-base max-w-2xl mx-auto">
-            Relocating from another district? Easily discover nearby verified companies for internships and in-plant training with student ratings and reviews.
-        </p>
-    </section>
-
-    <!-- MAIN CONTENT AREA (CONTAINER FLUID) -->
-    <main class="container-fluid px-6 py-10 flex-grow" id="companies">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-800">Featured Companies & Training Centers</h2>
-            <span class="text-sm text-gray-500">Showing top-rated locations nearby</span>
+    <!-- LEFT OFF-CANVAS SIDEBAR -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="leftMenuSidebar">
+        <div class="offcanvas-header bg-brand-primary text-white">
+            <h5 class="offcanvas-title fw-bold"><i class="fa-solid fa-graduation-cap text-brand-yellow me-2"></i>InternLocate</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
-
-        <!-- COMPANY CARDS GRID -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            <!-- Company Card 1 -->
-            <div onclick="openAuthModal('Apex Tech Solutions')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border border-gray-100 flex flex-col justify-between group">
-                <div>
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Apex Tech" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                        <span class="absolute top-3 right-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-full font-medium">0.8 km away</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Apex Tech Solutions</h3>
-                            <div class="flex items-center bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded font-bold">
-                                <i class="fa-solid fa-star text-yellow-500 mr-1"></i> 4.8
-                            </div>
-                        </div>
-                        <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-map-marker-alt text-red-500 mr-1"></i> Tech Park District, Main Road</p>
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">Software Dev</span>
-                            <span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-md font-medium">IoT & Embedded</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-                    <span class="text-xs text-gray-500">120+ Students Trained</span>
-                    <span class="text-xs font-semibold text-indigo-600 group-hover:underline">Click to Register &rarr;</span>
-                </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between">
+            <div class="list-group list-group-flush fw-semibold">
+                <a href="index.html" class="list-group-item list-group-item-action py-3 border-0 active bg-primary-subtle text-primary">
+                    <i class="fa-solid fa-house me-3 text-primary"></i>Home
+                </a>
+                <a href="companies.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-building me-3 text-primary"></i>Companies Directory (38 Districts)
+                </a>
+                <a href="loading.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-satellite-dish me-3 text-primary"></i>Geospatial Terminal
+                </a>
+                <a href="login.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-id-badge me-3 text-primary"></i>Student Login / Register
+                </a>
+                <a href="about.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-circle-info me-3 text-primary"></i>About Platform
+                </a>
+                <a href="contact.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-envelope me-3 text-primary"></i>Contact Support
+                </a>
             </div>
-
-            <!-- Company Card 2 -->
-            <div onclick="openAuthModal('Global Robotics & Automation')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border border-gray-100 flex flex-col justify-between group">
-                <div>
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80" alt="Global Robotics" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                        <span class="absolute top-3 right-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-full font-medium">2.1 km away</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Global Robotics Hub</h3>
-                            <div class="flex items-center bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded font-bold">
-                                <i class="fa-solid fa-star text-yellow-500 mr-1"></i> 4.6
-                            </div>
-                        </div>
-                        <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-map-marker-alt text-red-500 mr-1"></i> Industrial Estate, North Zone</p>
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">Robotics</span>
-                            <span class="bg-purple-50 text-purple-700 px-2.5 py-1 rounded-md font-medium">Automation</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-                    <span class="text-xs text-gray-500">85+ Students Trained</span>
-                    <span class="text-xs font-semibold text-indigo-600 group-hover:underline">Click to Register &rarr;</span>
-                </div>
+            <div class="p-3 bg-light rounded-4 text-center border">
+                <small class="text-secondary d-block mb-2">Tamil Nadu Student Portal</small>
+                <a href="login.html" class="btn btn-brand btn-sm rounded-pill w-100 fw-bold">
+                    <i class="fa-solid fa-user-check me-1"></i> Account Access
+                </a>
             </div>
-
-            <!-- Company Card 3 -->
-            <div onclick="openAuthModal('Core Infrastructure Ltd')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border border-gray-100 flex flex-col justify-between group">
-                <div>
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=600&q=80" alt="Core Infra" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                        <span class="absolute top-3 right-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-full font-medium">3.5 km away</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Core Infrastructure Ltd</h3>
-                            <div class="flex items-center bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded font-bold">
-                                <i class="fa-solid fa-star text-yellow-500 mr-1"></i> 4.9
-                            </div>
-                        </div>
-                        <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-map-marker-alt text-red-500 mr-1"></i> Bypass Avenue, District West</p>
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">Civil & Structural</span>
-                            <span class="bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md font-medium">CAD/CAM</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-                    <span class="text-xs text-gray-500">200+ Students Trained</span>
-                    <span class="text-xs font-semibold text-indigo-600 group-hover:underline">Click to Register &rarr;</span>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
-        <p>&copy; 2026 InternLocate. Assisting out-of-district students with nearby company allocations.</p>
-    </footer>
-
-    <!-- POPUP MODAL (LOGIN & SIGNUP FORM) -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
-            
-            <!-- Close Button -->
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-            
-            <!-- Modal Header -->
-            <div class="mb-6 border-b pb-3">
-                <h3 class="text-xl font-bold text-indigo-700" id="modalTitle">Student Details & Application</h3>
-                <p class="text-xs text-gray-500">Register your information for: <span id="targetCompanyName" class="font-semibold text-gray-800"></span></p>
-            </div>
-
-            <!-- Application Form -->
-            <form onsubmit="handleFormSubmit(event)" class="space-y-4">
-                
-                <!-- Full Name -->
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Full Name</label>
-                    <input type="text" required placeholder="John Doe" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-
-                <!-- College & Age Grid -->
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="col-span-2">
-                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">College Name</label>
-                        <input type="text" required placeholder="Institute of Technology" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Age</label>
-                        <input type="number" required min="16" max="60" placeholder="20" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-
-                <!-- Program Type (Radio Buttons) -->
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Applying For</label>
-                    <div class="flex space-x-6 bg-gray-50 p-2.5 rounded-lg border">
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" name="programType" value="Internship" checked class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-sm font-medium text-gray-700">Internship</span>
-                        </label>
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" name="programType" value="In-Plant Training" class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-sm font-medium text-gray-700">In-Plant Training</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Department / Role -->
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Department / Target Role</label>
-                    <select required class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="">Select Department</option>
-                        <option value="Computer Science / IT">Computer Science / IT</option>
-                        <option value="Mechanical Engineering">Mechanical Engineering</option>
-                        <option value="Electronics & Communication">Electronics & Communication</option>
-                        <option value="Electrical Engineering">Electrical Engineering</option>
-                        <option value="Civil Engineering">Civil Engineering</option>
-                    </select>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg shadow hover:bg-indigo-700 transition-colors">
-                    Submit Application & Login
-                </button>
-            </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- HERO SECTION WITH SEARCH GATE -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold mb-3 shadow-sm">
+                <i class="fa-solid fa-map-location-dot me-1"></i> All 38 Tamil Nadu Districts Covered
+            </span>
+            <h1 class="display-5 fw-bold mb-3">Find Verified In-Plant & Internship Centers with Exact Addresses</h1>
+            <p class="lead text-light opacity-75 max-w-700 mx-auto" style="max-width: 680px; font-size: 1.05rem;">
+                Search across all 38 districts in Tamil Nadu. Access exact SIPCOT, SIDCO, and IT Park postal addresses with one-click Google Maps navigation.
+            </p>
+
+            <!-- MANDATORY LOGIN PROTECTED HERO SEARCH -->
+            <div class="search-container-hero">
+                <form onsubmit="handleHeroSearch(event)">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-12 col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-location-dot text-primary"></i></span>
+                                <select id="heroDistrictSelect" class="form-select border-0 shadow-none">
+                                    <option value="">Select Tamil Nadu District...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-briefcase text-secondary"></i></span>
+                                <input type="text" id="heroKeyword" class="form-control border-0 shadow-none" placeholder="Company, sector, or exact street...">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <button type="submit" class="btn btn-brand w-100 py-2.5 rounded-3 fw-bold">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3 mt-3 text-light text-opacity-75 small">
+                <span><i class="fa-solid fa-lock text-warning me-1"></i> Mandatory student login for search security</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-route text-warning me-1"></i> Direct Google Maps coordinates</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-building text-warning me-1"></i> All industry sectors</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="container-fluid px-4 py-5 flex-grow-1">
+
+        <!-- ALL 38 DISTRICTS INTERACTIVE DIRECTORY SECTION -->
+        <section class="mb-5">
+            <div class="text-center mb-4">
+                <span class="badge bg-primary-subtle text-primary px-3 py-1.5 rounded-pill fw-bold">Statewide Coverage</span>
+                <h3 class="fw-bold mt-2">Explore All 38 Districts in Tamil Nadu</h3>
+                <p class="text-muted small mb-0">Select any district to view its industrial estates, exact addresses, and open internship centers.</p>
+            </div>
+            
+            <!-- 38 Districts Grid Container -->
+            <div class="row g-2 g-md-3" id="allDistrictsGrid"></div>
+        </section>
+
+        <!-- HOW IT WORKS PROCESS -->
+        <section class="intern-process-section mb-5">
+            <div class="text-center mb-5">
+                <span class="process-badge">
+                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i>SIMPLE & SECURE PROCESS
+                </span>
+                <h2 class="process-title mt-3">Your Internship Journey Across Tamil Nadu</h2>
+                <p class="text-secondary small max-w-650 mx-auto">
+                    Verified access for Tamil Nadu college students from login to in-plant allocation.
+                </p>
+            </div>
+
+            <div class="process-wrapper">
+                <!-- STEP 1 -->
+                <div class="process-card text-center">
+                    <div class="process-icon"><i class="fa-solid fa-user-shield"></i></div>
+                    <span class="step-label">STEP 01</span>
+                    <h5 class="fw-bold text-dark mt-2 mb-2">Mandatory Login</h5>
+                    <p class="text-muted small mb-0">Sign in with your student registration to protect industrial access and unlock verified facilities.</p>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="process-card text-center">
+                    <div class="process-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <span class="step-label">STEP 02</span>
+                    <h5 class="fw-bold text-dark mt-2 mb-2">Select Any District</h5>
+                    <p class="text-muted small mb-0">Filter from all 38 districts and major industrial sectors matching your engineering/arts curriculum.</p>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="process-card text-center">
+                    <div class="process-icon"><i class="fa-solid fa-compass"></i></div>
+                    <span class="step-label">STEP 03</span>
+                    <h5 class="fw-bold text-dark mt-2 mb-2">Inspect Exact Address</h5>
+                    <p class="text-muted small mb-0">View full door/plot numbers, SIPCOT landmarks, and open live directions in Google Maps.</p>
+                </div>
+
+                <!-- STEP 4 -->
+                <div class="process-card text-center">
+                    <div class="process-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                    <span class="step-label">STEP 04</span>
+                    <h5 class="fw-bold text-dark mt-2 mb-2">Apply in 1-Click</h5>
+                    <p class="text-muted small mb-0">Submit pre-filled applications with bonafide details directly to the company's training cell.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLATFORM METRICS STATS -->
+        <section class="stats-section rounded-4 p-4 mb-5 shadow-sm">
+            <div class="row g-3 text-center">
+                <div class="col-6 col-md-3">
+                    <div class="stat-number">38 / 38</div>
+                    <div class="stat-label">Tamil Nadu Districts Covered</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Major Industry Sectors</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Exact Addresses & Maps</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Verified Student Portal</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-secondary py-4 text-center mt-auto">
+        <div class="container-fluid px-4">
+            <p class="mb-1 text-light fw-semibold">InternLocate &bull; Tamil Nadu Industrial Training Gateway</p>
+            <p class="mb-0 small">&copy; 2026 InternLocate. Assisting college students across all 38 districts of Tamil Nadu.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth-session.js"></script>
+    <script src="companies-data.js"></script>
+
     <script>
-        function openAuthModal(companyName) {
-            document.getElementById('targetCompanyName').innerText = companyName;
-            const modal = document.getElementById('authModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+        // HIDE PRELOADER ON LOAD
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                }
+            }, 800);
+        });
+
+        // POPULATE ALL 38 DISTRICTS IN SELECT & GRID
+        document.addEventListener("DOMContentLoaded", function() {
+            const select = document.getElementById("heroDistrictSelect");
+            const grid = document.getElementById("allDistrictsGrid");
+
+            TN_DISTRICTS.forEach(district => {
+                // Dropdown option
+                const opt = document.createElement("option");
+                opt.value = district;
+                opt.textContent = district;
+                select.appendChild(opt);
+
+                // Grid card tile
+                const col = document.createElement("div");
+                col.className = "col-6 col-sm-4 col-md-3 col-lg-2";
+                col.innerHTML = `
+                    <a href="#" onclick="handleDistrictClick('${district}'); return false;" class="district-tile">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>${district}</span>
+                    </a>
+                `;
+                grid.appendChild(col);
+            });
+        });
+
+        // MANDATORY LOGIN PROTECTED HERO SEARCH HANDLER
+        function handleHeroSearch(e) {
+            e.preventDefault();
+            const district = document.getElementById("heroDistrictSelect").value;
+            const keyword = document.getElementById("heroKeyword").value.trim();
+
+            const queryParams = new URLSearchParams();
+            if (district) queryParams.set("district", district);
+            if (keyword) queryParams.set("search", keyword);
+
+            const targetUrl = `companies.html${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+
+            // Check if user is logged in
+            if (!authSession.isLoggedIn()) {
+                alert("⚠️ Mandatory Student Login Required\n\nPlease log in or register before searching companies and exploring Tamil Nadu training locations.");
+                window.location.href = `login.html?redirect=${encodeURIComponent(targetUrl)}&authRequired=1`;
+            } else {
+                window.location.href = targetUrl;
+            }
         }
 
-        function closeAuthModal() {
-            const modal = document.getElementById('authModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            alert("Application submitted successfully! Our coordinator will contact you with route details.");
-            closeAuthModal();
+        // CLICKING A DISTRICT TILE
+        function handleDistrictClick(districtName) {
+            const targetUrl = `companies.html?district=${encodeURIComponent(districtName)}`;
+            if (!authSession.isLoggedIn()) {
+                alert(`⚠️ Mandatory Student Login Required\n\nPlease log in or register to browse industrial training facilities in ${districtName} district.`);
+                window.location.href = `login.html?redirect=${encodeURIComponent(targetUrl)}&authRequired=1`;
+            } else {
+                window.location.href = targetUrl;
+            }
         }
     </script>
 </body>

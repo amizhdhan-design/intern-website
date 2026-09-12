@@ -3,174 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - InternLocate</title>
+    <title>About Platform - InternLocate</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS for Brand Tweaks -->
+    
     <style>
         :root {
-            --bs-primary: #4f46e5;
-            --bs-primary-hover: #4338ca;
+            --brand-primary: #4f46e5;
+            --brand-hover: #4338ca;
+            --brand-yellow: #fde047;
         }
-        .bg-brand-primary {
-            background-color: #4f46e5 !important;
-        }
-        .btn-brand {
-            background-color: #4f46e5;
-            color: #ffffff;
-        }
-        .btn-brand:hover {
-            background-color: #4338ca;
-            color: #ffffff;
-        }
-        .text-brand-yellow {
-            color: #fde047;
-        }
-        .hero-banner {
-            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-        }
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
+        body { background-color: #f8fafc; }
+        .bg-brand-primary { background-color: var(--brand-primary) !important; }
+        .text-brand-yellow { color: var(--brand-yellow) !important; }
+        .btn-brand { background-color: var(--brand-primary); color: #ffffff; border: none; }
+        .hero-banner { background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); }
     </style>
 </head>
-<body class="bg-light d-flex flex-column min-vh-100 text-dark">
+<body class="d-flex flex-column min-vh-100">
 
-    <!-- HEADER / NAVIGATION BAR -->
+    <!-- HEADER (NO LOCATION SEARCH ON ABOUT PAGE) -->
     <header class="bg-brand-primary text-white shadow-sm sticky-top">
         <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
-            <!-- Brand Logo -->
-            <a href="index.html" class="d-flex align-items-center text-white text-decoration-none space-x-2">
-                <i class="fa-solid fa-graduation-cap fa-2x text-brand-yellow me-2"></i>
-                <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
-            </a>
-
-            <!-- Navigation Links -->
-            <nav class="d-none d-md-flex align-items-center gap-4 font-medium">
-                <a href="index.html" class="text-white text-decoration-none opacity-75 opacity-100-hover">Home</a>
-                <a href="index.html#companies" class="text-white text-decoration-none opacity-75 opacity-100-hover">Companies</a>
-                <a href="about.html" class="text-brand-yellow text-decoration-none fw-bold">About Services</a>
-                <a href="#contact" class="text-white text-decoration-none opacity-75 opacity-100-hover">Contact</a>
-            </nav>
-
-            <!-- Location Search Input -->
-            <div class="position-relative" style="width: 240px;">
-                <input type="text" placeholder="Search by district/city..." class="form-control form-control-sm rounded-pill ps-4 border-0">
-                <i class="fa-solid fa-location-dot position-absolute top-50 start-0 translate-middle-y ms-2.5 text-muted small" style="left: 6px;"></i>
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light border-0 fs-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftMenuSidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <a href="index.html" class="d-flex align-items-center text-white text-decoration-none">
+                    <i class="fa-solid fa-graduation-cap fa-2x text-brand-yellow me-2"></i>
+                    <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
+                </a>
             </div>
+            <div id="sessionUserDisplay"></div>
         </div>
     </header>
+
+    <!-- LEFT MENU SIDEBAR -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="leftMenuSidebar">
+        <div class="offcanvas-header bg-brand-primary text-white">
+            <h5 class="offcanvas-title fw-bold"><i class="fa-solid fa-graduation-cap text-brand-yellow me-2"></i>InternLocate</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="list-group list-group-flush fw-semibold">
+                <a href="index.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-house me-3 text-primary"></i>Home</a>
+                <a href="companies.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-building me-3 text-primary"></i>Companies Directory</a>
+                <a href="loading.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-satellite-dish me-3 text-primary"></i>Geospatial Terminal</a>
+                <a href="login.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-id-badge me-3 text-primary"></i>Student Login / Register</a>
+                <a href="about.html" class="list-group-item list-group-item-action py-3 border-0 active bg-primary-subtle text-primary"><i class="fa-solid fa-circle-info me-3 text-primary"></i>About Platform</a>
+                <a href="contact.html" class="list-group-item list-group-item-action py-3 border-0"><i class="fa-solid fa-envelope me-3 text-primary"></i>Contact Support</a>
+            </div>
+        </div>
+    </div>
 
     <!-- HERO SECTION -->
     <section class="hero-banner text-white py-5 px-3 text-center">
         <div class="container py-3">
-            <h1 class="display-5 fw-bold mb-3">Empowering Students Across Districts</h1>
+            <h1 class="display-5 fw-bold mb-3">Empowering Engineering Students Across Tamil Nadu</h1>
             <p class="lead text-light max-w-2xl mx-auto col-md-8">
-                Simplifying the discovery of verified nearby internships and in-plant training opportunities for relocating college students.
+                Streamlining industrial allocations, distance mapping, and verified training records for relocations across 38 districts.
             </p>
         </div>
     </section>
 
-    <!-- MAIN CONTENT -->
+    <!-- EXPANDED DETAILED CONTENT -->
     <main class="container py-5 flex-grow-1">
-
-        <!-- OUR MISSION SECTION -->
+        
+        <!-- Section 1: Detailed Workflow -->
         <div class="row align-items-center mb-5 g-4">
             <div class="col-lg-6">
-                <span class="badge bg-indigo-100 text-primary mb-2 px-3 py-2 rounded-pill fw-bold">Our Mission</span>
-                <h2 class="fw-bold mb-3">Bridging the Gap Between Remote Students & Quality Training</h2>
+                <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 rounded-pill fw-bold">How It Works</span>
+                <h2 class="fw-bold mb-3">Eliminating Placement Friction for Relocating Students</h2>
                 <p class="text-secondary">
-                    Relocating to an unfamiliar district for practical training can be daunting. <strong>InternLocate</strong> was created to eliminate guesswork by mapping out verified local companies, transparent student ratings, and precise proximity data.
+                    Engineering and technical curricula across Tamil Nadu mandate short-term in-plant training and seasonal internships. When relocating to unfamiliar industrial hubs like Chennai, Coimbatore, or Madurai, students face challenges finding legitimate companies and safe routes.
                 </p>
-                <ul class="list-unstyled text-secondary">
-                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i> Verified training centers & company profiles</li>
-                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i> Real student feedback and rating metrics</li>
-                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i> Geo-located company recommendations</li>
-                </ul>
+                <div class="d-flex flex-column gap-3 mt-4">
+                    <div class="d-flex align-items-start">
+                        <div class="badge bg-primary p-2.5 rounded-circle me-3"><i class="fa-solid fa-1"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Persistent Profile Onboarding</h6>
+                            <p class="text-muted small mb-0">Students submit their details once (college, year, department, and contact information), establishing a permanent session profile on their browser.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <div class="badge bg-primary p-2.5 rounded-circle me-3"><i class="fa-solid fa-2"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1">District Proximity Search</h6>
+                            <p class="text-muted small mb-0">Select any of the 38 districts in Tamil Nadu to immediately filter verified industrial units and tech parks.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <div class="badge bg-primary p-2.5 rounded-circle me-3"><i class="fa-solid fa-3"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Instant Allocation Requests</h6>
+                            <p class="text-muted small mb-0">Submit direct training applications to recruiters with pre-populated student profile credentials.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-6">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Team Collaboration" class="img-fluid rounded-4 shadow-sm border">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Team Collaboration" class="img-fluid rounded-4 shadow border">
             </div>
         </div>
 
-        <!-- CORE SERVICES CARDS -->
-        <div class="my-5">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold">Services We Offer</h2>
-                <p class="text-muted">Designed specifically to assist engineering and technical domain students.</p>
-            </div>
-
-            <div class="row g-4">
-                <!-- Service 1 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm p-3">
-                        <div class="card-body">
-                            <div class="feature-icon bg-primary bg-opacity-10 text-primary mb-3">
-                                <i class="fa-solid fa-location-crosshairs fa-xl"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Proximity Search</h5>
-                            <p class="card-text text-muted">Locate institutes and corporations offering in-plant training within radial distances of your current stay.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Service 2 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm p-3">
-                        <div class="card-body">
-                            <div class="feature-icon bg-success bg-opacity-10 text-success mb-3">
-                                <i class="fa-solid fa-file-signature fa-xl"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Direct Application</h5>
-                            <p class="card-text text-muted">Streamline your application process by sending your student profile and department details straight to recruiters.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Service 3 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm p-3">
-                        <div class="card-body">
-                            <div class="feature-icon bg-warning bg-opacity-10 text-warning mb-3">
-                                <i class="fa-solid fa-shield-halved fa-xl"></i>
-                            </div>
-                            <h5 class="card-title fw-bold">Verified Analytics</h5>
-                            <p class="card-text text-muted">Access aggregated data on student intake numbers, verified reviews, and specialized department tracks.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- METRICS/STATS BAR -->
-        <div class="bg-brand-primary text-white rounded-4 p-4 p-md-5 shadow-sm my-5 text-center">
+        <!-- Section 2: Platform Statistics -->
+        <div class="bg-brand-primary text-white rounded-4 p-4 p-md-5 my-5 shadow text-center">
+            <h3 class="fw-bold mb-4">Platform Impact Across Tamil Nadu</h3>
             <div class="row g-4">
                 <div class="col-6 col-md-3">
-                    <h3 class="display-6 fw-bold text-brand-yellow">500+</h3>
-                    <p class="mb-0 text-light opacity-75">Verified Companies</p>
+                    <h2 class="display-6 fw-bold text-brand-yellow">38</h2>
+                    <p class="mb-0 text-light opacity-75">Districts Mapped</p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h3 class="display-6 fw-bold text-brand-yellow">12,000+</h3>
-                    <p class="mb-0 text-light opacity-75">Students Assisted</p>
+                    <h2 class="display-6 fw-bold text-brand-yellow">500+</h2>
+                    <p class="mb-0 text-light opacity-75">Partner Companies</p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h3 class="display-6 fw-bold text-brand-yellow">30+</h3>
-                    <p class="mb-0 text-light opacity-75">Districts Covered</p>
+                    <h2 class="display-6 fw-bold text-brand-yellow">12,000+</h2>
+                    <p class="mb-0 text-light opacity-75">Students Allocated</p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h3 class="display-6 fw-bold text-brand-yellow">4.8 / 5</h3>
-                    <p class="mb-0 text-light opacity-75">Average Rating</p>
+                    <h2 class="display-6 fw-bold text-brand-yellow">4.8 / 5</h2>
+                    <p class="mb-0 text-light opacity-75">Student Satisfaction</p>
                 </div>
             </div>
         </div>
 
+        <!-- Section 3: Platform Administration & Engineering -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-5">
+            <div class="row align-items-center g-4">
+                <div class="col-md-3 text-center">
+                    <div class="d-inline-flex p-4 rounded-circle bg-primary bg-opacity-10 text-primary mb-3">
+                        <i class="fa-solid fa-user-gear fa-4x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-1">Amizhdhan R.</h5>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">Platform Admin & Lead</span>
+                </div>
+                <div class="col-md-9 ps-md-4 border-start-md">
+                    <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mb-2 px-3 py-1 rounded-pill">
+                        <i class="fa-solid fa-graduation-cap me-1"></i> Kongu Engineering College (KEC), Erode
+                    </span>
+                    <h4 class="fw-bold text-dark mb-2">Engineered & Administered in Erode District</h4>
+                    <p class="text-secondary small mb-3">
+                        InternLocate was conceptualized, built, and administered by <strong>Amizhdhan R.</strong>, studying at <strong>Kongu Engineering College</strong>, Perundurai, Erode District. The platform addresses logistical hurdles faced by engineering and polytechnic students across Tamil Nadu by indexing verified industrial companies with pinpoint physical addresses and direct Google Maps navigation.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 small text-muted">
+                        <span><i class="fa-solid fa-code text-primary me-1"></i> Department of Computer Science & Engineering</span>
+                        <span>&bull;</span>
+                        <span><i class="fa-solid fa-location-dot text-danger me-1"></i> Perundurai, Erode District - 638060</span>
+                        <span>&bull;</span>
+                        <span><i class="fa-solid fa-envelope text-primary me-1"></i> amizhdhan.admin@kongu.edu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- FOOTER -->
@@ -180,7 +168,7 @@
         </div>
     </footer>
 
-    <!-- Bootstrap 5 JavaScript Bundle CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth-session.js"></script>
 </body>
 </html>

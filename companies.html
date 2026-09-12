@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternLocate | Tamil Nadu Companies & Exact Addresses</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-primary: #5142df;
+            --brand-hover: #3e31ca;
+            --brand-yellow: #fde047;
+            --surface-bg: #f8fafc;
+        }
+        body {
+            background-color: var(--surface-bg);
+            color: #172033;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .bg-brand-primary {
+            background-color: var(--brand-primary) !important;
+        }
+        .text-brand-yellow {
+            color: var(--brand-yellow) !important;
+        }
+        .btn-brand {
+            background-color: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-brand:hover {
+            background-color: var(--brand-hover);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(81, 66, 223, 0.25);
+        }
+        .company-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .company-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 30px rgba(30, 41, 59, 0.12) !important;
+            border-color: #cbd5e1;
+        }
+        .card-img-container {
+            height: 175px;
+            overflow: hidden;
+            position: relative;
+            background-color: #e2e8f0;
+        }
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .company-card:hover .card-img-container img {
+            transform: scale(1.06);
+        }
+        .badge-district {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .badge-rating {
+            background-color: #fef9c3;
+            color: #854d0e;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .badge-sector {
+            background-color: #eef2ff;
+            color: var(--brand-primary);
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid #e0e7ff;
+            display: inline-block;
+        }
+        .exact-address-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            color: #475569;
+            line-height: 1.45;
+        }
+        .filter-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Modal styling */
+        .modal-header-brand {
+            background: linear-gradient(135deg, var(--brand-primary), #6366f1);
+            color: white;
+        }
+
+        /* Mandatory Login Lock Screen Overlay */
+        #authLockOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- MANDATORY AUTHENTICATION LOCK OVERLAY (Visible only when not logged in) -->
+    <div id="authLockOverlay">
+        <div class="card border-0 rounded-4 shadow-lg text-center p-4 p-md-5 bg-white" style="max-width: 520px;">
+            <div class="mb-3">
+                <div class="d-inline-flex p-3 rounded-circle bg-danger bg-opacity-10 text-danger mb-2">
+                    <i class="fa-solid fa-lock fa-3x"></i>
+                </div>
+            </div>
+            <h3 class="fw-bold text-dark mb-2">Mandatory Login Required</h3>
+            <p class="text-secondary small mb-4">
+                To search companies, view exact Tamil Nadu industrial addresses, and submit in-plant training applications, you must log in with a verified student profile.
+            </p>
+            <div class="d-grid gap-2">
+                <a href="login.html?redirect=companies.html&authRequired=1" class="btn btn-brand py-2.5 rounded-3 fw-bold">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i>Go to Student Login
+                </a>
+                <button type="button" onclick="authSession.loginAsDemoStudent('companies.html')" class="btn btn-warning py-2.5 rounded-3 fw-bold text-dark">
+                    <i class="fa-solid fa-bolt me-2"></i>1-Click Quick Demo Login
+                </button>
+                <a href="index.html" class="btn btn-light border py-2 rounded-3 text-secondary small">
+                    Return to Home Page
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="bg-brand-primary text-white shadow-sm sticky-top">
+        <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light border-0 fs-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftMenuSidebar">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <a href="index.html" class="d-flex align-items-center text-white text-decoration-none">
+                    <i class="fa-solid fa-graduation-cap fa-2x text-brand-yellow me-2"></i>
+                    <span class="fs-4 fw-bold tracking-wide">InternLocate</span>
+                </a>
+            </div>
+
+            <!-- User Session & Quick Search -->
+            <div class="d-flex align-items-center gap-3">
+                <div id="sessionUserDisplay"></div>
+                <div class="position-relative d-none d-md-block" style="width: 220px;">
+                    <input type="text" id="topDistrict" placeholder="📍 Jump to District..." class="form-control form-control-sm rounded-pill ps-3 border-0 shadow-sm">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- LEFT OFF-CANVAS SIDEBAR -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="leftMenuSidebar">
+        <div class="offcanvas-header bg-brand-primary text-white">
+            <h5 class="offcanvas-title fw-bold"><i class="fa-solid fa-graduation-cap text-brand-yellow me-2"></i>InternLocate</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between">
+            <div class="list-group list-group-flush fw-semibold">
+                <a href="index.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-house me-3 text-primary"></i>Home
+                </a>
+                <a href="companies.html" class="list-group-item list-group-item-action py-3 border-0 active bg-primary-subtle text-primary">
+                    <i class="fa-solid fa-building me-3 text-primary"></i>Companies Directory
+                </a>
+                <a href="loading.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-satellite-dish me-3 text-primary"></i>Geospatial Terminal
+                </a>
+                <a href="about.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-circle-info me-3 text-primary"></i>About Platform
+                </a>
+                <a href="contact.html" class="list-group-item list-group-item-action py-3 border-0">
+                    <i class="fa-solid fa-envelope me-3 text-primary"></i>Contact Support
+                </a>
+            </div>
+            <div class="p-3 bg-light rounded-4 text-center border">
+                <small class="text-muted d-block mb-2">Authenticated Session</small>
+                <button onclick="authSession.logoutUser()" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold">
+                    <i class="fa-solid fa-right-from-bracket me-1"></i> Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="container-fluid px-4 py-4 flex-grow-1">
+        
+        <!-- TITLE SECTION -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Tamil Nadu Industrial Training & Internship Directory</h2>
+                <p class="text-secondary small mb-0">Verified companies with exact postal addresses & Google Maps across all 38 districts.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <span class="badge bg-success-subtle text-success border border-success border-opacity-25 fs-7 px-3 py-2 rounded-pill fw-bold">
+                    <i class="fa-solid fa-circle-check me-1"></i>All 38 Districts Covered
+                </span>
+                <span class="badge bg-primary fs-7 px-3 py-2 rounded-pill shadow-sm" id="verifiedBadge">
+                    <i class="fa-solid fa-building me-1"></i><span id="badgeCount">Loading...</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- COMPREHENSIVE FILTER TOOLBAR -->
+        <div class="card filter-card p-4 mb-4">
+            <div class="row g-3 align-items-center">
+                
+                <!-- 1. District Dropdown (All 38 Districts) -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label small fw-bold text-secondary mb-1">DISTRICT (38 TN DISTRICTS)</label>
+                    <select id="districtFilter" class="form-select border-secondary-subtle">
+                        <option value="all">All Tamil Nadu Districts (38)</option>
+                    </select>
+                </div>
+
+                <!-- 2. Sector Dropdown (All Major Sectors) -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label small fw-bold text-secondary mb-1">INDUSTRY SECTOR</label>
+                    <select id="sectorFilter" class="form-select border-secondary-subtle">
+                        <option value="all">All Industry Sectors</option>
+                    </select>
+                </div>
+
+                <!-- 3. Work Mode Dropdown -->
+                <div class="col-6 col-md-2">
+                    <label class="form-label small fw-bold text-secondary mb-1">WORK MODE</label>
+                    <select id="modeFilter" class="form-select border-secondary-subtle">
+                        <option value="all">All Modes</option>
+                        <option value="On-site">On-site</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+
+                <!-- 4. Duration Dropdown -->
+                <div class="col-6 col-md-2">
+                    <label class="form-label small fw-bold text-secondary mb-1">DURATION</label>
+                    <select id="durationFilter" class="form-select border-secondary-subtle">
+                        <option value="all">All Durations</option>
+                        <option value="1-2 Weeks">1-2 Weeks In-Plant</option>
+                        <option value="2 Months">2 Months</option>
+                        <option value="3 Months">3 Months</option>
+                        <option value="6 Months">6 Months</option>
+                    </select>
+                </div>
+
+                <!-- 5. Reset Button -->
+                <div class="col-12 col-md-2 d-flex align-items-end">
+                    <button class="btn btn-outline-secondary w-100 fw-bold rounded-3" onclick="resetFilters()">
+                        <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset
+                    </button>
+                </div>
+
+                <!-- 6. Keyword Search Bar -->
+                <div class="col-12 mt-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-secondary-subtle"><i class="fa-solid fa-magnifying-glass text-primary"></i></span>
+                        <input id="searchInput" type="text" class="form-control border-secondary-subtle py-2" placeholder="Search by company name, exact street address, SIPCOT/SIDCO landmark, pincode, or role...">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SEARCH STATS COUNT -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="text-muted fw-semibold small mb-0" id="resultsCount">Loading companies...</p>
+            <small class="text-secondary">
+                <i class="fa-solid fa-location-dot text-danger me-1"></i> Exact postal addresses verified with Google Maps
+            </small>
+        </div>
+
+        <!-- DYNAMIC COMPANY CARDS GRID -->
+        <div class="row g-4" id="companyGrid"></div>
+
+    </main>
+
+    <!-- EXACT ADDRESS & MAP DETAILS MODAL -->
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header modal-header-brand px-4 py-3 border-0">
+                    <div>
+                        <span class="badge bg-warning text-dark fw-bold mb-1" id="modalSector">Sector</span>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="modalCompanyName">Company Name</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <!-- EXACT ADDRESS CARD -->
+                    <div class="card bg-light border-0 rounded-4 p-3 mb-4">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="p-3 bg-danger bg-opacity-10 text-danger rounded-3 fs-4">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold text-dark mb-1">Exact Physical & Postal Address</h6>
+                                <p class="text-secondary mb-2" id="modalExactAddress">Address...</p>
+                                <div class="d-flex flex-wrap gap-2 small">
+                                    <span class="badge bg-secondary-subtle text-secondary" id="modalLandmark">Landmark</span>
+                                    <span class="badge bg-secondary-subtle text-secondary" id="modalPincode">Pincode</span>
+                                    <span class="badge bg-primary-subtle text-primary" id="modalDistrict">District</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROLE & DURATION DETAILS -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-white border rounded-3 text-center">
+                                <small class="text-muted d-block">Role Offered</small>
+                                <strong class="text-dark small" id="modalRole">-</strong>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-white border rounded-3 text-center">
+                                <small class="text-muted d-block">Stipend</small>
+                                <strong class="text-success small" id="modalStipend">-</strong>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-white border rounded-3 text-center">
+                                <small class="text-muted d-block">Duration</small>
+                                <strong class="text-primary small" id="modalDuration">-</strong>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="p-3 bg-white border rounded-3 text-center">
+                                <small class="text-muted d-block">Work Mode</small>
+                                <strong class="text-dark small" id="modalWorkMode">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ABOUT & SKILLS -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-dark mb-1">Facility & Training Overview</h6>
+                        <p class="text-secondary small mb-3" id="modalDescription">Description...</p>
+                        <h6 class="fw-bold text-dark mb-1">Prerequisites & Skills</h6>
+                        <p class="text-secondary small mb-0" id="modalSkills">Skills...</p>
+                    </div>
+
+                    <hr>
+
+                    <!-- CONTACT DETAILS -->
+                    <div class="row g-2 small text-secondary">
+                        <div class="col-md-6">
+                            <i class="fa-solid fa-phone text-primary me-2"></i><span id="modalPhone">-</span>
+                        </div>
+                        <div class="col-md-6">
+                            <i class="fa-solid fa-envelope text-primary me-2"></i><span id="modalEmail">-</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer bg-light px-4 py-3 border-0 d-flex justify-content-between">
+                    <a id="modalMapLink" href="#" target="_blank" class="btn btn-outline-danger rounded-pill px-4 fw-bold">
+                        <i class="fa-solid fa-map-location-dot me-2"></i>Open in Google Maps
+                    </a>
+                    <button id="modalApplyBtn" class="btn btn-brand rounded-pill px-4 fw-bold">
+                        <i class="fa-solid fa-paper-plane me-2"></i>Apply for Internship
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRE-FILLED INTERNSHIP APPLICATION MODAL -->
+    <div class="modal fade" id="applicationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header modal-header-brand px-4 py-3 border-0">
+                    <div>
+                        <small class="text-white opacity-75">Student Internship Application</small>
+                        <h5 class="modal-title fw-bold text-white mb-0">Apply to <span id="appCompanyName">Company</span></h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="applicationForm" onsubmit="handleApplicationSubmission(event)">
+                    <div class="modal-body p-4">
+                        
+                        <div class="alert alert-info py-2 px-3 rounded-3 small mb-4">
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            Pre-filled from your authenticated student session. Please confirm your details below.
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">STUDENT FULL NAME</label>
+                                <input type="text" id="appFullName" class="form-control" required readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">COLLEGE NAME</label>
+                                <input type="text" id="appCollege" class="form-control" required readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">DEPARTMENT</label>
+                                <input type="text" id="appDept" class="form-control" required readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">YEAR OF STUDY</label>
+                                <input type="text" id="appYear" class="form-control" required readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-secondary">PHONE NUMBER</label>
+                                <input type="text" id="appPhone" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">EMAIL ADDRESS</label>
+                                <input type="email" id="appEmail" class="form-control" required readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">PREFERRED START DATE</label>
+                                <input type="date" id="appStartDate" class="form-control" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-secondary">TECHNICAL SKILLS & MOTIVATION</label>
+                                <textarea id="appSkills" class="form-control" rows="3" placeholder="Describe why you want to intern at this facility..." required></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer bg-light px-4 py-3 border-0">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-brand rounded-pill px-4 fw-bold">
+                            <i class="fa-solid fa-check me-2"></i>Confirm & Submit Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-secondary py-4 text-center mt-auto">
+        <div class="container-fluid px-4">
+            <p class="mb-0 small">&copy; 2026 InternLocate. Assisting students with verified in-plant training & internship allocations across all 38 Tamil Nadu districts.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Authentication Session Manager -->
+    <script src="auth-session.js"></script>
+    <!-- Tamil Nadu 38 Districts Database -->
+    <script src="companies-data.js"></script>
+
+    <script>
+        // 1. MANDATORY LOGIN ENFORCEMENT
+        let currentAuthenticatedUser = null;
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!authSession.isLoggedIn()) {
+                document.getElementById("authLockOverlay").style.display = "flex";
+                return;
+            }
+            currentAuthenticatedUser = authSession.getUser();
+            initDirectoryPage();
+        });
+
+        // 2. INITIALIZE DIRECTORY
+        const districtFilter = document.getElementById("districtFilter");
+        const sectorFilter = document.getElementById("sectorFilter");
+        const modeFilter = document.getElementById("modeFilter");
+        const durationFilter = document.getElementById("durationFilter");
+        const searchInput = document.getElementById("searchInput");
+        const topDistrict = document.getElementById("topDistrict");
+        const companyGrid = document.getElementById("companyGrid");
+        const resultsCount = document.getElementById("resultsCount");
+        const badgeCount = document.getElementById("badgeCount");
+
+        let addressModalInstance, appModalInstance;
+        let activeSelectedCompany = null;
+
+        function initDirectoryPage() {
+            addressModalInstance = new bootstrap.Modal(document.getElementById("addressModal"));
+            appModalInstance = new bootstrap.Modal(document.getElementById("applicationModal"));
+
+            // Populate 38 districts in dropdown
+            TN_DISTRICTS.forEach(d => {
+                const opt = document.createElement("option");
+                opt.value = d;
+                opt.textContent = d;
+                districtFilter.appendChild(opt);
+            });
+
+            // Populate sectors in dropdown
+            TN_SECTORS.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s;
+                opt.textContent = s;
+                sectorFilter.appendChild(opt);
+            });
+
+            // Read URL params if navigated with ?district=... or ?search=...
+            const urlParams = new URLSearchParams(window.location.search);
+            const distParam = urlParams.get("district");
+            const searchParam = urlParams.get("search");
+
+            if (distParam) {
+                const matched = TN_DISTRICTS.find(d => d.toLowerCase() === distParam.toLowerCase());
+                if (matched) districtFilter.value = matched;
+            }
+            if (searchParam) {
+                searchInput.value = searchParam;
+            }
+
+            // Set minimum start date for application
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("appStartDate").min = today;
+            document.getElementById("appStartDate").value = today;
+
+            // Event Listeners
+            districtFilter.addEventListener("change", renderDirectory);
+            sectorFilter.addEventListener("change", renderDirectory);
+            modeFilter.addEventListener("change", renderDirectory);
+            durationFilter.addEventListener("change", renderDirectory);
+            searchInput.addEventListener("input", renderDirectory);
+
+            if (topDistrict) {
+                topDistrict.addEventListener("input", function() {
+                    const val = this.value.trim().toLowerCase();
+                    if (!val) {
+                        districtFilter.value = "all";
+                    } else {
+                        const match = TN_DISTRICTS.find(d => d.toLowerCase().includes(val));
+                        if (match) districtFilter.value = match;
+                    }
+                    renderDirectory();
+                });
+            }
+
+            renderDirectory();
+        }
+
+        // 3. RENDER FUNCTION
+        function renderDirectory() {
+            const selectedDist = districtFilter.value.toLowerCase();
+            const selectedSector = sectorFilter.value.toLowerCase();
+            const selectedMode = modeFilter.value.toLowerCase();
+            const selectedDuration = durationFilter.value.toLowerCase();
+            const query = searchInput.value.trim().toLowerCase();
+
+            const filtered = ALL_COMPANIES_DATA.filter(c => {
+                const matchDist = selectedDist === "all" || c.district.toLowerCase() === selectedDist;
+                const matchSector = selectedSector === "all" || c.sector.toLowerCase() === selectedSector;
+                const matchMode = selectedMode === "all" || c.workMode.toLowerCase() === selectedMode;
+                const matchDuration = selectedDuration === "all" || c.duration.toLowerCase().includes(selectedDuration);
+                
+                const searchableText = `${c.name} ${c.district} ${c.exactAddress} ${c.landmark} ${c.pincode} ${c.sector} ${c.role} ${c.skillsRequired}`.toLowerCase();
+                const matchQuery = !query || searchableText.includes(query);
+
+                return matchDist && matchSector && matchMode && matchDuration && matchQuery;
+            });
+
+            // Update badges and count
+            resultsCount.textContent = `Showing ${filtered.length} of ${ALL_COMPANIES_DATA.length} verified facilities across Tamil Nadu`;
+            badgeCount.textContent = `${filtered.length} Centers`;
+
+            if (filtered.length === 0) {
+                companyGrid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fa-solid fa-map-location-dot fa-3x text-muted mb-3"></i>
+                        <h4 class="fw-bold">No companies found for this selection</h4>
+                        <p class="text-secondary small">Try changing your district, industry sector, or keyword filters.</p>
+                        <button onclick="resetFilters()" class="btn btn-brand btn-sm rounded-pill px-4">Reset All Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            companyGrid.innerHTML = filtered.map(createCompanyCardHtml).join("");
+        }
+
+        // 4. CARD HTML BUILDER
+        function createCompanyCardHtml(c) {
+            const mapsUrl = getGoogleMapsUrl(c);
+            return `
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="company-card h-100 d-flex flex-column justify-content-between shadow-sm">
+                        <div>
+                            <div class="card-img-container">
+                                <img src="${c.image}" alt="${c.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80'">
+                                <span class="badge-district"><i class="fa-solid fa-location-dot text-warning me-1"></i>${c.district}</span>
+                            </div>
+                            <div class="p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+                                    <h5 class="fw-bold mb-0 text-dark fs-6 text-truncate" title="${c.name}">${c.name}</h5>
+                                    <span class="badge-rating"><i class="fa-solid fa-star text-warning me-1"></i>${c.rating}</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="badge-sector">${c.sector}</span>
+                                </div>
+
+                                <!-- EXACT ADDRESS HIGHLIGHT -->
+                                <div class="exact-address-box mb-3">
+                                    <div class="fw-bold text-dark mb-1 text-truncate">
+                                        <i class="fa-solid fa-building text-primary me-1"></i>${c.exactAddress.split(',')[0]}
+                                    </div>
+                                    <div class="text-truncate" title="${c.exactAddress}">
+                                        <i class="fa-solid fa-map-pin text-danger me-1"></i>${c.exactAddress}
+                                    </div>
+                                    <div class="text-muted mt-1" style="font-size: 11px;">
+                                        <strong>PIN:</strong> ${c.pincode} | <strong>Landmark:</strong> ${c.landmark}
+                                    </div>
+                                </div>
+
+                                <div class="small text-secondary mb-1">
+                                    <strong>Role:</strong> ${c.role}
+                                </div>
+                                <div class="small text-secondary mb-2">
+                                    <strong>Duration:</strong> ${c.duration} (${c.workMode})
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTIONS FOOTER -->
+                        <div class="p-3 bg-light border-top d-flex justify-content-between align-items-center gap-2">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="openAddressModal('${c.id}')">
+                                <i class="fa-solid fa-map me-1"></i>Exact Address
+                            </button>
+                            <button class="btn btn-sm btn-brand rounded-pill px-3 fw-bold" onclick="openApplyModal('${c.id}')">
+                                Apply &rarr;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 5. EXACT ADDRESS & MAP MODAL HANDLER
+        function openAddressModal(id) {
+            const company = ALL_COMPANIES_DATA.find(x => x.id === id);
+            if (!company) return;
+            activeSelectedCompany = company;
+
+            document.getElementById("modalSector").innerText = company.sector;
+            document.getElementById("modalCompanyName").innerText = company.name;
+            document.getElementById("modalExactAddress").innerText = company.exactAddress;
+            document.getElementById("modalLandmark").innerText = "Landmark: " + company.landmark;
+            document.getElementById("modalPincode").innerText = "PIN: " + company.pincode;
+            document.getElementById("modalDistrict").innerText = "District: " + company.district;
+            document.getElementById("modalRole").innerText = company.role;
+            document.getElementById("modalStipend").innerText = company.stipend;
+            document.getElementById("modalDuration").innerText = company.duration;
+            document.getElementById("modalWorkMode").innerText = company.workMode;
+            document.getElementById("modalDescription").innerText = company.description;
+            document.getElementById("modalSkills").innerText = company.skillsRequired;
+            document.getElementById("modalPhone").innerText = company.phone;
+            document.getElementById("modalEmail").innerText = company.email;
+
+            // Set Google Maps Link
+            document.getElementById("modalMapLink").href = getGoogleMapsUrl(company);
+
+            // Wire Apply Button from address modal
+            document.getElementById("modalApplyBtn").onclick = function() {
+                addressModalInstance.hide();
+                openApplyModal(company.id);
+            };
+
+            addressModalInstance.show();
+        }
+
+        // 6. APPLICATION MODAL PRE-FILL & OPEN
+        function openApplyModal(id) {
+            const company = ALL_COMPANIES_DATA.find(x => x.id === id);
+            if (!company) return;
+            activeSelectedCompany = company;
+
+            document.getElementById("appCompanyName").innerText = `${company.name} (${company.district})`;
+
+            const student = authSession.getUser();
+            if (student) {
+                document.getElementById("appFullName").value = student.fullName || "";
+                document.getElementById("appCollege").value = student.college || "";
+                document.getElementById("appDept").value = student.department || "";
+                document.getElementById("appYear").value = student.year || "";
+                document.getElementById("appPhone").value = student.phone || "";
+                document.getElementById("appEmail").value = student.email || "";
+            }
+
+            appModalInstance.show();
+        }
+
+        // 7. SUBMIT APPLICATION
+        function handleApplicationSubmission(e) {
+            e.preventDefault();
+            if (!activeSelectedCompany) return;
+
+            const appRecord = {
+                companyId: activeSelectedCompany.id,
+                companyName: activeSelectedCompany.name,
+                district: activeSelectedCompany.district,
+                role: activeSelectedCompany.role,
+                studentName: document.getElementById("appFullName").value,
+                college: document.getElementById("appCollege").value,
+                department: document.getElementById("appDept").value,
+                startDate: document.getElementById("appStartDate").value,
+                skillsNote: document.getElementById("appSkills").value,
+                submittedAt: new Date().toISOString()
+            };
+
+            // Save to localStorage applications store
+            const existing = JSON.parse(localStorage.getItem("internlocate_applications") || "[]");
+            existing.push(appRecord);
+            localStorage.setItem("internlocate_applications", JSON.stringify(existing));
+
+            appModalInstance.hide();
+            alert(`🎉 Application Successfully Submitted!\n\nTarget Center: ${activeSelectedCompany.name} (${activeSelectedCompany.district})\nRole: ${activeSelectedCompany.role}\nStart Date: ${appRecord.startDate}\n\nA copy of your industrial training request has been recorded for your student profile.`);
+        }
+
+        // 8. RESET FILTERS
+        function resetFilters() {
+            districtFilter.value = "all";
+            sectorFilter.value = "all";
+            modeFilter.value = "all";
+            durationFilter.value = "all";
+            searchInput.value = "";
+            if (topDistrict) topDistrict.value = "";
+            renderDirectory();
+        }
+    </script>
+</body>
+</html>
