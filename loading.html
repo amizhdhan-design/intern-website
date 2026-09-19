@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InternLocate - Geospatial Terminal & Satellite Calibration</title>
+    <title>InternLocate - Internship Intelligence Network</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -326,11 +326,265 @@
             border-color: var(--neon-cyan);
             background: rgba(0, 242, 254, 0.1);
         }
+    
+        /* ===== PREMIUM INTERNSHIP INTELLIGENCE ENHANCEMENTS ===== */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            background:
+                radial-gradient(circle at 50% 45%, rgba(0,242,254,.08), transparent 30%),
+                radial-gradient(circle at 10% 90%, rgba(139,92,246,.08), transparent 28%),
+                radial-gradient(circle at 90% 10%, rgba(245,158,11,.06), transparent 25%);
+        }
+
+        .ambient-grid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: .35;
+            background-image:
+                linear-gradient(90deg, transparent 49.8%, rgba(0,242,254,.08) 50%, transparent 50.2%),
+                linear-gradient(transparent 49.8%, rgba(0,242,254,.08) 50%, transparent 50.2%);
+            background-size: 120px 120px;
+            mask-image: radial-gradient(circle, black, transparent 78%);
+        }
+
+        .top-status-strip {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 0 auto 16px;
+            position: relative;
+            z-index: 3;
+        }
+        .status-chip {
+            min-width: 125px;
+            padding: 9px 13px;
+            border: 1px solid rgba(0,242,254,.18);
+            background: rgba(5,12,25,.65);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 18px rgba(0,242,254,.03);
+        }
+        .status-chip .value {
+            display: block;
+            font-family: 'Orbitron', monospace;
+            font-size: 15px;
+            color: #fff;
+            letter-spacing: .8px;
+        }
+        .status-chip .label {
+            display: block;
+            margin-top: 2px;
+            color: #64748b;
+            font: 9px 'Share Tech Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        .hud-card {
+            overflow: hidden;
+        }
+        .hud-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, transparent, rgba(0,242,254,.035), transparent);
+            animation: panelSweep 7s linear infinite;
+        }
+        @keyframes panelSweep {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        .radar-sweep {
+            position: absolute;
+            width: 48%;
+            height: 48%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, rgba(0,242,254,.25), transparent 38%);
+            filter: blur(.2px);
+            animation: radarSpin 5s linear infinite;
+            pointer-events: none;
+            opacity: .65;
+            z-index: 2;
+        }
+        @keyframes radarSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .network-line {
+            position: absolute;
+            height: 1px;
+            transform-origin: left center;
+            background: linear-gradient(90deg, rgba(0,242,254,.55), transparent);
+            opacity: .35;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .orbiter-core {
+            position: absolute;
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 30%, rgba(255,255,255,.22), transparent 10%),
+                radial-gradient(circle, rgba(0,242,254,.18), rgba(8,16,35,.92) 58%, rgba(0,242,254,.08));
+            border: 1px solid rgba(0,242,254,.55);
+            box-shadow: 0 0 30px rgba(0,242,254,.2), inset 0 0 28px rgba(0,242,254,.12);
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .orbiter-core::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #00f2fe;
+            box-shadow: 0 0 16px #00f2fe;
+            animation: corePulse 1.4s ease-in-out infinite;
+        }
+        @keyframes corePulse {
+            50% { transform: scale(1.8); opacity: .55; }
+        }
+
+        .data-stream {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-top: 12px;
+        }
+        .data-stream span {
+            height: 4px;
+            border-radius: 10px;
+            background: rgba(0,242,254,.12);
+            overflow: hidden;
+            position: relative;
+        }
+        .data-stream span::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            width: 55%;
+            background: #00f2fe;
+            box-shadow: 0 0 10px #00f2fe;
+            animation: stream 1.8s ease-in-out infinite alternate;
+        }
+        .data-stream span:nth-child(2)::after { animation-delay: .25s; }
+        .data-stream span:nth-child(3)::after { animation-delay: .5s; }
+        .data-stream span:nth-child(4)::after { animation-delay: .75s; }
+        @keyframes stream {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(180%); }
+        }
+
+        .command-console {
+            margin-top: 20px;
+            padding: 13px 15px;
+            border: 1px solid rgba(0,242,254,.18);
+            border-radius: 14px;
+            background: rgba(0,0,0,.28);
+            box-shadow: inset 0 0 25px rgba(0,242,254,.025);
+            text-align: left;
+        }
+        .console-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #64748b;
+            font: 10px 'Share Tech Mono', monospace;
+            letter-spacing: 1px;
+        }
+        .console-row {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font: 11px 'Share Tech Mono', monospace;
+            color: #94a3b8;
+            padding: 4px 0;
+        }
+        .console-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #00f2fe;
+            box-shadow: 0 0 8px #00f2fe;
+        }
+        .console-bar {
+            flex: 1;
+            height: 3px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.07);
+            overflow: hidden;
+        }
+        .console-bar i {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, #00f2fe, #8b5cf6);
+            box-shadow: 0 0 8px rgba(0,242,254,.5);
+            animation: consoleLoad 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes consoleLoad {
+            from { width: 35%; }
+            to { width: 92%; }
+        }
+
+        .section-kicker {
+            color: #64748b;
+            font: 10px 'Share Tech Mono', monospace;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .btn-cyber {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-cyber::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 70%;
+            height: 100%;
+            transform: skewX(-25deg);
+            background: rgba(255,255,255,.18);
+            transition: left .5s ease;
+        }
+        .btn-cyber:hover::before { left: 140%; }
+
+        @media (max-width: 767px) {
+            .terminal-header { padding: 10px 12px; }
+            .status-chip { min-width: 105px; }
+            .status-chip .value { font-size: 12px; }
+            .command-console { margin-top: 14px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- SCANLINE EFFECT -->
+    <div class="ambient-grid"></div>
     <div class="scanline"></div>
 
     <!-- TOP TELEMETRY BAR -->
@@ -339,7 +593,7 @@
             <div class="d-flex align-items-center gap-2">
                 <i class="fa-solid fa-satellite-dish text-warning fs-5"></i>
                 <span class="tech-font fw-bold text-white fs-6">INTERN LOCATE</span>
-                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-50 small mono-font">GEOSPATIAL TERMINAL v3.8</span>
+                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-50 small mono-font">INTERNSHIP INTELLIGENCE v4.0</span>
             </div>
         </div>
 
@@ -359,7 +613,27 @@
     </header>
 
     <!-- MAIN HOLOGRAPHIC STAGE -->
-    <main class="hud-stage container-fluid px-3 px-md-5 my-auto">
+    
+    <div class="top-status-strip">
+        <div class="status-chip">
+            <span class="value" id="statDistricts">38</span>
+            <span class="label">DISTRICTS NETWORKED</span>
+        </div>
+        <div class="status-chip">
+            <span class="value">500+</span>
+            <span class="label">INTERNSHIP SOURCES</span>
+        </div>
+        <div class="status-chip">
+            <span class="value">10</span>
+            <span class="label">INDUSTRY SECTORS</span>
+        </div>
+        <div class="status-chip">
+            <span class="value" id="statPulse">LIVE</span>
+            <span class="label">NETWORK PULSE</span>
+        </div>
+    </div>
+
+<main class="hud-stage container-fluid px-3 px-md-5 my-auto">
         <div class="row justify-content-center">
             <div class="col-12 col-xxl-11">
                 <div class="hud-card p-4 p-md-5" id="interactiveCard">
@@ -388,8 +662,8 @@
 
                                 <div class="small text-secondary mb-3 mono-font">
                                     <div class="telemetry-item">
-                                        <span>GPS ACCURACY</span>
-                                        <span class="text-success fw-bold">99.8% (PINPOINT)</span>
+                                        <span>NETWORK POSITION MODE</span>
+                                        <span class="text-success fw-bold">SIMULATED</span>
                                     </div>
                                     <div class="telemetry-item">
                                         <span>SIPCOT / SEZ MAPS</span>
@@ -417,7 +691,7 @@
                             
                             <div class="mb-3">
                                 <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-50 px-3 py-1.5 rounded-pill tech-font small">
-                                    <i class="fa-solid fa-satellite me-1"></i> TAMIL NADU STATEWIDE CALIBRATION
+                                    <i class="fa-solid fa-satellite me-1"></i> TAMIL NADU INTERNSHIP NETWORK
                                 </span>
                             </div>
 
@@ -434,7 +708,18 @@
                                 <div class="gyro-ring-middle"></div>
                                 <div class="gyro-ring-inner"></div>
 
-                                <!-- Targeting Reticle -->
+                                
+                                <div class="radar-sweep"></div>
+                                <div class="orbiter-core">
+                                    <i class="fa-solid fa-graduation-cap fa-2x text-warning"></i>
+                                </div>
+
+                                <!-- Network connection lines -->
+                                <div class="network-line" style="width:115px; left:50%; top:50%; transform:rotate(-25deg);"></div>
+                                <div class="network-line" style="width:130px; left:50%; top:50%; transform:rotate(155deg);"></div>
+                                <div class="network-line" style="width:105px; left:50%; top:50%; transform:rotate(72deg);"></div>
+
+<!-- Targeting Reticle -->
                                 <div class="targeting-beacon">
                                     <div class="beacon-crosshair-h"></div>
                                     <div class="beacon-crosshair-v"></div>
@@ -466,10 +751,26 @@
                                 <div class="cyber-progress-container mb-2">
                                     <div class="cyber-progress-bar" id="cyberProgress"></div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center mono-font small text-secondary">
+                                
+                                <div class="data-stream" aria-hidden="true">
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+
+<div class="d-flex justify-content-between align-items-center mono-font small text-secondary">
                                     <span id="scanStatus">SCANNING: CHENNAI REGION</span>
                                     <span class="fw-bold text-warning fs-6 tech-font" id="percentageLabel">0%</span>
                                 </div>
+
+                            </div>
+
+                            <div class="command-console">
+                                <div class="console-head">
+                                    <span><i class="fa-solid fa-terminal me-1"></i>NETWORK COMMAND STREAM</span>
+                                    <span class="text-success">ENCRYPTED</span>
+                                </div>
+                                <div class="console-row"><span class="console-dot"></span><span>CHENNAI</span><div class="console-bar"><i style="width:88%"></i></div><span>88%</span></div>
+                                <div class="console-row"><span class="console-dot"></span><span>COIMBATORE</span><div class="console-bar"><i style="width:76%"></i></div><span>76%</span></div>
+                                <div class="console-row"><span class="console-dot"></span><span>MADURAI</span><div class="console-bar"><i style="width:64%"></i></div><span>64%</span></div>
                             </div>
 
                         </div>
@@ -521,7 +822,7 @@
 
     <!-- FOOTER TELEMETRY STATUS -->
     <footer class="text-center py-3 text-secondary small mono-font border-top border-secondary border-opacity-10">
-        &copy; 2026 InternLocate &bull; Tamil Nadu Statewide Industrial Internship Telemetry System &bull; All 38 Districts Calibrated
+        &copy; 2026 InternLocate &bull; Tamil Nadu Internship Intelligence Network &bull; All 38 Districts Calibrated
     </footer>
 
     <script src="auth-session.js"></script>
@@ -710,12 +1011,36 @@
 
                 playSciFiBeep(1760, 0.15, 'square');
 
-                // Auto launch after 1.2s delay
-                setTimeout(() => {
-                    launchTargetPage();
-                }, 1200);
+                // User chooses when to enter the directory.
+                // This keeps the completed calibration screen visible.
             }
         }, 50);
+
+
+        // 5. NETWORK PULSE MICRO-ANIMATION
+        const statPulse = document.getElementById("statPulse");
+        setInterval(() => {
+            if (!statPulse) return;
+            statPulse.innerText = statPulse.innerText === "LIVE" ? "SYNC" : "LIVE";
+            statPulse.style.color = statPulse.innerText === "LIVE"
+                ? "var(--neon-green)"
+                : "var(--neon-cyan)";
+        }, 1400);
+
+        // Make the headline feel like a live command terminal.
+        const commandMessages = [
+            "Establishing district intelligence mesh...",
+            "Synchronizing internship discovery nodes...",
+            "Validating company location records...",
+            "Preparing student search interface..."
+        ];
+        let commandIndex = 0;
+        setInterval(() => {
+            if (currentProgress >= 100) return;
+            const msg = commandMessages[commandIndex % commandMessages.length];
+            loadingSubtext.innerText = msg;
+            commandIndex++;
+        }, 2200);
 
         // Handoff to directory or login
         function launchTargetPage() {

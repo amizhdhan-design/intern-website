@@ -40,59 +40,313 @@
             box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
         }
 
-        /* GEOSPATIAL ORBITAL PRELOADER STYLES */
+        /* =========================================================
+           PREMIUM GEOSPATIAL ORBITAL PRELOADER
+           ========================================================= */
         #preloader {
             position: fixed;
             inset: 0;
-            background: #060913;
             z-index: 99999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            overflow: hidden;
+            color: #fff;
+            background:
+                radial-gradient(circle at 50% 42%, rgba(0,242,254,.12), transparent 28%),
+                radial-gradient(circle at 20% 80%, rgba(124,58,237,.12), transparent 30%),
+                radial-gradient(circle at 80% 20%, rgba(245,158,11,.08), transparent 25%),
+                #030611;
+            transition: opacity .65s ease, visibility .65s ease;
         }
+
+        #preloader::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .28;
+            background-image:
+                linear-gradient(rgba(0,242,254,.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,242,254,.06) 1px, transparent 1px);
+            background-size: 42px 42px;
+            transform: perspective(500px) rotateX(55deg) scale(1.5);
+            transform-origin: center bottom;
+            animation: gridDrift 8s linear infinite;
+        }
+
+        #preloader::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0,
+                transparent 4px,
+                rgba(255,255,255,.018) 5px,
+                transparent 6px
+            );
+            animation: scanMove 7s linear infinite;
+        }
+
         .preloader-gyro {
-            width: 120px;
-            height: 120px;
+            width: 180px;
+            height: 180px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+            filter: drop-shadow(0 0 25px rgba(0,242,254,.18));
         }
+
+        .preloader-gyro::before {
+            content: "";
+            position: absolute;
+            inset: -18px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,242,254,.12);
+            box-shadow:
+                0 0 35px rgba(0,242,254,.08),
+                inset 0 0 35px rgba(0,242,254,.04);
+            animation: radarPulse 2.2s ease-in-out infinite;
+        }
+
+        .preloader-gyro::after {
+            content: "";
+            position: absolute;
+            inset: 25px;
+            border-radius: 50%;
+            border: 1px solid rgba(253,224,71,.22);
+            border-left-color: transparent;
+            border-right-color: transparent;
+            animation: spinRing 10s linear infinite;
+        }
+
         .gyro-ring-1 {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            border: 2px dashed rgba(0, 242, 254, 0.5);
+            border: 2px dashed rgba(0,242,254,.58);
+            box-shadow: 0 0 20px rgba(0,242,254,.08);
             animation: spinRing 8s linear infinite;
         }
+
+        .gyro-ring-1::before,
+        .gyro-ring-1::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00f2fe;
+            box-shadow: 0 0 12px #00f2fe;
+        }
+
+        .gyro-ring-1::before {
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .gyro-ring-1::after {
+            bottom: 12px;
+            right: 50%;
+            transform: translateX(50%);
+        }
+
         .gyro-ring-2 {
             position: absolute;
-            inset: 12px;
+            inset: 14px;
             border-radius: 50%;
             border: 2px solid transparent;
             border-top-color: #f59e0b;
             border-bottom-color: #00f2fe;
+            box-shadow: 0 0 18px rgba(245,158,11,.08);
             animation: spinRingRev 4s linear infinite;
         }
+
         .gyro-core {
-            width: 54px;
-            height: 54px;
+            width: 68px;
+            height: 68px;
+            position: relative;
+            z-index: 2;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.35) 0%, transparent 70%);
+            background:
+                radial-gradient(circle at 50% 45%, rgba(255,255,255,.22) 0 5%, transparent 6%),
+                radial-gradient(circle, rgba(0,242,254,.38) 0%, rgba(0,242,254,.12) 42%, transparent 72%);
+            border: 1px solid rgba(0,242,254,.42);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fde047;
-            font-size: 24px;
+            font-size: 27px;
+            box-shadow:
+                0 0 18px rgba(0,242,254,.35),
+                inset 0 0 18px rgba(0,242,254,.18);
             animation: pulseGlow 1.5s infinite ease-in-out;
         }
-        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes spinRingRev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
-        @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+
+        .gyro-core::before {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            top: 9px;
+            right: 9px;
+            border-radius: 50%;
+            background: #fde047;
+            box-shadow: 0 0 12px #fde047;
+            animation: blinkPoint 1s ease-in-out infinite;
+        }
+
+        .preloader-title {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            text-shadow: 0 0 18px rgba(0,242,254,.28);
+        }
+
+        .preloader-subtitle {
+            position: relative;
+            z-index: 2;
+            margin-top: 5px;
+            color: rgba(255,255,255,.58);
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+        }
+
+        .preloader-status {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 7px 13px;
+            border: 1px solid rgba(0,242,254,.2);
+            border-radius: 999px;
+            background: rgba(0,242,254,.05);
+            color: rgba(255,255,255,.78);
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+        }
+
+        .preloader-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 12px #22c55e;
+            animation: blinkPoint 1s ease-in-out infinite;
+        }
+
+        .preloader-progress {
+            position: relative;
+            z-index: 2;
+            width: min(330px, 72vw);
+            height: 3px;
+            margin-top: 18px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255,255,255,.08);
+            box-shadow: 0 0 15px rgba(0,242,254,.08);
+        }
+
+        .preloader-progress::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            width: 38%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, transparent, #00f2fe, #fde047);
+            box-shadow: 0 0 14px rgba(0,242,254,.75);
+            animation: loadingSweep 1.8s ease-in-out infinite;
+        }
+
+        .preloader-code {
+            position: relative;
+            z-index: 2;
+            margin-top: 10px;
+            color: rgba(0,242,254,.52);
+            font-family: "Courier New", monospace;
+            font-size: .58rem;
+            letter-spacing: .12em;
+        }
+
+        @keyframes spinRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinRingRev {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: .82; }
+            50% { transform: scale(1.13); opacity: 1; }
+        }
+
+        @keyframes radarPulse {
+            0%, 100% { transform: scale(.92); opacity: .35; }
+            50% { transform: scale(1.06); opacity: .75; }
+        }
+
+        @keyframes blinkPoint {
+            0%, 100% { opacity: .35; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes loadingSweep {
+            0% { transform: translateX(-140%); }
+            100% { transform: translateX(360%); }
+        }
+
+        @keyframes gridDrift {
+            from { transform: perspective(500px) rotateX(55deg) scale(1.5) translateY(0); }
+            to { transform: perspective(500px) rotateX(55deg) scale(1.5) translateY(42px); }
+        }
+
+        @keyframes scanMove {
+            from { transform: translateY(-8%); }
+            to { transform: translateY(8%); }
+        }
+
+        @media (max-width: 576px) {
+            .preloader-gyro {
+                width: 145px;
+                height: 145px;
+            }
+
+            .preloader-title {
+                letter-spacing: .14em;
+            }
+
+            .preloader-subtitle {
+                letter-spacing: .14em;
+                font-size: .62rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #preloader *,
+            #preloader::before,
+            #preloader::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+            }
+        }
+
 
         /* HERO SECTION */
         .hero-section {
@@ -241,21 +495,29 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- GEOSPATIAL ORBITAL LOADING SCREEN -->
+    <!-- PREMIUM GEOSPATIAL ORBITAL LOADING SCREEN -->
     <div id="preloader">
         <div class="preloader-gyro">
             <div class="gyro-ring-1"></div>
             <div class="gyro-ring-2"></div>
             <div class="gyro-core">
-                <i class="fa-solid fa-satellite-dish"></i>
+                <i class="fa-solid fa-satellite"></i>
             </div>
         </div>
-        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-white border-opacity-15 mb-2">
-            <span class="badge bg-warning text-dark small fw-bold">GPS SYNC</span>
-            <span class="small text-light">Tamil Nadu Geo-Terminal</span>
+
+        <h1 class="preloader-title">InternLocate</h1>
+        <div class="preloader-subtitle">Internship Intelligence Network</div>
+
+        <div class="preloader-status">
+            <span class="preloader-status-dot"></span>
+            SYSTEM INITIALIZING
         </div>
-        <h4 class="fw-bold tracking-wide text-white mb-1">InternLocate</h4>
-        <p class="small text-secondary mb-0">Calibrating 38 Districts & Exact Addresses...</p>
+
+        <div class="preloader-progress"></div>
+
+        <div class="preloader-code">
+            TN_GRID // 38 DISTRICTS // NETWORK ONLINE
+        </div>
     </div>
 
     <!-- HEADER / NAVIGATION BAR -->
@@ -469,6 +731,20 @@
     <script src="companies-data.js"></script>
 
     <script>
+        // PREMIUM PRELOADER STATUS
+        document.addEventListener("DOMContentLoaded", function() {
+            const status = document.querySelector(".preloader-status");
+            if (status) {
+                setTimeout(() => {
+                    status.innerHTML = '<span class="preloader-status-dot"></span> CALIBRATING DISTRICT NETWORK';
+                }, 500);
+
+                setTimeout(() => {
+                    status.innerHTML = '<span class="preloader-status-dot"></span> NETWORK ONLINE';
+                }, 1200);
+            }
+        });
+
         // HIDE PRELOADER ON LOAD
         window.addEventListener('load', function() {
             setTimeout(function() {
